@@ -1,0 +1,77 @@
+/* Garantir que o #root ocupe 100% da largura da tela disponível e seja centralizado */
+#root {
+  width: 100%;              /* Ocupa toda a largura da tela disponível */
+  max-width: 1200px;        /* Limita a largura máxima a 1200px */
+  margin: 0 auto;           /* Centraliza o conteúdo horizontalmente */
+  padding: 2rem;            /* Adiciona espaçamento interno ao redor do conteúdo */
+  text-align: center;       /* Centraliza o texto dentro do conteúdo */
+  box-sizing: border-box;   /* Inclui padding e border no cálculo da largura e altura */
+}
+
+/* Estilos para o corpo da página, garantindo que o conteúdo ocupe toda a altura da tela */
+body {
+  font-family: 'Arial', sans-serif; /* Fonte padrão */
+  width: 100%;                    /* Ocupa toda a largura da tela */
+  margin: 0;                      /* Remove margens padrão do body */
+  padding: 0;                     /* Remove padding padrão do body */
+  background-color: #f4f4f4;      /* Cor de fundo para o body */
+  display: flex;                  /* Usado para centralizar o conteúdo verticalmente */
+  flex-direction: column;         /* Organiza o conteúdo na coluna */
+  min-height: 100vh;              /* Garante que o body ocupe a altura total da tela */
+}
+
+/* Adicionar responsividade para telas pequenas */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;               /* Reduz o padding em telas menores */
+  }
+  h1 {
+    font-size: 2rem;             /* Ajusta o tamanho da fonte para títulos em telas pequenas */
+  }
+}
+
+/* Estilo para links (com foco no design limpo e moderno) */
+a {
+  text-decoration: none;         /* Remove o sublinhado */
+  color: inherit;                /* Herda a cor do elemento pai */
+  font-weight: bold;             /* Deixa os links em negrito */
+}
+
+/* Estilo para elementos de texto */
+h1, h2, h3, h4, h5, h6 {
+  margin: 1rem 0;                /* Adiciona espaço entre os títulos */
+  color: #333;                   /* Cor de texto mais suave */
+}
+
+/* Estilos de um botão genérico */
+button {
+  background-color: #333;        /* Cor de fundo do botão */
+  color: #fff;                   /* Cor do texto do botão */
+  border: none;                  /* Remove a borda do botão */
+  padding: 10px 20px;            /* Padding interno do botão */
+  font-size: 16px;               /* Tamanho da fonte do botão */
+  border-radius: 5px;            /* Borda arredondada */
+  cursor: pointer;               /* Aplica o cursor de pointer ao passar o mouse */
+  transition: background-color 0.3s; /* Transição suave na mudança de cor */
+}
+
+/* Estilo de hover para botões */
+button:hover {
+  background-color: #555;        /* Cor de fundo do botão quando passar o mouse */
+}
+
+/* Estilos gerais para containers internos */
+.container {
+  display: flex;
+  flex-direction: column;        /* Organiza os elementos em coluna */
+  align-items: center;           /* Alinha os itens no centro */
+  justify-content: center;       /* Alinha os itens verticalmente */
+  padding: 2rem;
+}
+
+/* Estilo de containers de imagens */
+.img-container {
+  max-width: 100%;               /* Garantir que as imagens não ultrapassem a largura do container */
+  height: auto;                  /* Mantém a proporção das imagens */
+  margin-bottom: 2rem;           /* Adiciona espaço abaixo das imagens */
+}
