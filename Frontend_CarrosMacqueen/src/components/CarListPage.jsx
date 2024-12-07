@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Link } from 'react-router-dom';
 
 const CarListPage = () => {
@@ -10,7 +10,7 @@ const CarListPage = () => {
     // Função para buscar os carros do backend
     const fetchCars = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/cars'); // Endpoint para pegar os carros
+        const response = await api.get('http://localhost:5000/api/cars'); // Endpoint para pegar os carros
         setCars(response.data.cars); // Atualiza o estado com os dados dos carros
         setLoading(false); // Define como não carregando
       } catch (error) {
