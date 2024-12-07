@@ -3,24 +3,23 @@ import api from '../api';
 import { Link } from 'react-router-dom';
 
 const CarListPage = () => {
-  const [cars, setCars] = useState([]); // Estado para armazenar os carros
-  const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
+  const [cars, setCars] = useState([]); // Inicializando como um array vazio
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Função para buscar os carros do backend
     const fetchCars = async () => {
       try {
-        const response = await api.get('http://localhost:5000/api/cars'); // Endpoint para pegar os carros
-        setCars(response.data.cars); // Atualiza o estado com os dados dos carros
-        setLoading(false); // Define como não carregando
+        const response = await api.get('http://localhost:5000/api/cars');
+        setCars(response.data); // Atualiza com a resposta, que esperamos que seja um array
+        setLoading(false);
       } catch (error) {
         console.error('Erro ao carregar os carros', error);
-        setLoading(false); // Define como não carregando em caso de erro
+        setLoading(false);
       }
     };
 
-    fetchCars(); // Chama a função para buscar os carros
-  }, []); // O array vazio garante que a busca seja feita apenas uma vez, após o primeiro render
+    fetchCars();
+  }, []);
 
   // Estilos para a página
   const styles = {
@@ -66,7 +65,6 @@ const CarListPage = () => {
     },
   };
 
-  // Renderiza a página de listagem de carros
   return (
     <div style={styles.container}>
       <h1>Lista de Carros</h1>
@@ -80,14 +78,14 @@ const CarListPage = () => {
             cars.map((car) => (
               <div style={styles.carItem} key={car._id}>
                 <img
-                  src={`http://localhost:5000${car.image}`} // Caminho da imagem no backend
+                  src={car.image} // Caminho da imagem no backend
                   alt={car.name}
                   style={styles.carImage}
                 />
                 <div style={styles.carDetails}>
                   <h3>{car.name}</h3>
-                  <p>Modelo: {car.model}</p>
-                  <p>Preço: R${car.price}</p>
+                  <p>Modelo: {car.class}</p>
+                  <p>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
                   <Link to={`/car/${car._id}`} style={styles.carLink}>
                     Detalhes
                   </Link>
