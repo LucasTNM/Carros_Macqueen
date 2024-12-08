@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { Link } from 'react-router-dom';
+import SearchFilter from './SearchFilter';
 
 const CarListPage = () => {
-  const [cars, setCars] = useState([]); // Inicializando como um array vazio
+  const [cars, setCars] = useState([]); // Lista completa de carros
   const [loading, setLoading] = useState(true);
+  const [filteredCars, setFilteredCars] = useState([]); // Lista filtrada de carros
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
         const response = await api.get('http://localhost:5000/api/cars');
-        setCars(response.data); // Atualiza com a resposta, que esperamos que seja um array
+        setCars(response.data); // Atualiza a lista completa
+        setFilteredCars(response.data); // Inicializa a lista filtrada com todos os carros
         setLoading(false);
       } catch (error) {
         console.error('Erro ao carregar os carros', error);
@@ -67,15 +70,16 @@ const CarListPage = () => {
 
   return (
     <div style={styles.container}>
-      <h1>Lista de Carros</h1>
+      <h1>Confira nosso estoque:</h1>
+      <SearchFilter cars={cars} onFilter={setFilteredCars} />
       {loading ? (
         <p>Carregando carros...</p>
       ) : (
         <div style={styles.carList}>
-          {cars.length === 0 ? (
+          {filteredCars.length === 0 ? (
             <p>Nenhum carro encontrado.</p>
           ) : (
-            cars.map((car) => (
+            filteredCars.map((car) => (
               <div style={styles.carItem} key={car._id}>
                 <img
                   src={car.image} // Caminho da imagem no backend
