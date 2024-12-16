@@ -90,7 +90,7 @@ const CarListPage = () => {
                   <h3>{car.name}</h3>
                   <p>Modelo: {car.class}</p>
                   <p>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
-                  <Link to={`/car/${car._id}`} style={styles.carLink}>
+                  <Link to={`/car/${car.name}`} style={styles.carLink}>
                     Detalhes
                   </Link>
                 </div>

@@ -44,7 +44,7 @@ const SearchFilter = ({ cars, onFilter }) => {
     <div style={styles.container}>
       <input
         type="text"
-        placeholder="Pesquisar por nome"
+        placeholder="Pesquisar por nome, classe, ano ou preço..."
         value={searchTerm}
         onChange={handleSearchChange}
         style={styles.input}
