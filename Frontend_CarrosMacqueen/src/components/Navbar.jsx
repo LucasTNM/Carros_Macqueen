@@ -15,7 +15,7 @@ const Navbar = () => {
           <Link to="/about" style={styles.link}>Sobre Nós</Link>
         </li>
         <li>
-          <Link to="/PaymentPage" style={styles.link}>Carrinho</Link>
+          <Link to="/payment" style={styles.link}>Carrinho</Link>
         </li>
       </ul>
     </nav>

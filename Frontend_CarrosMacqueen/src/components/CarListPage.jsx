@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { Link } from 'react-router-dom';
 import SearchFilter from './SearchFilter';
+import Header from './Header';
+import Navbar from './Navbar';
 
 const CarListPage = () => {
   const [cars, setCars] = useState([]); // Lista completa de carros
@@ -70,6 +72,8 @@ const CarListPage = () => {
 
   return (
     <div style={styles.container}>
+      <Header />
+      <Navbar />
       <h1>Confira nosso estoque:</h1>
       <SearchFilter cars={cars} onFilter={setFilteredCars} />
       {loading ? (

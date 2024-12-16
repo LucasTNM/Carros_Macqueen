@@ -107,9 +107,14 @@ exports.getExpensiveCars = async (req, res) => {
 
 exports.getCheapCars = async (req, res) => {
   try {
-    const cars = await Car.find().sort({ price: 1 }).limit(10);
+    const cars = await Car.find().sort({ price: 1 }).limit(2);
+    console.log('Carros retornados:', cars); // Log para verificar os carros retornados
+    if (cars.length === 0) {
+      return res.status(404).json({ message: 'Carro não encontrado' });
+    }
     res.json(cars);
   } catch (error) {
+    console.error('Erro ao buscar carros mais baratos:', error); // Log para verificar erros
     res.status(500).json({ message: 'Erro ao buscar carros mais baratos', error: error.message });
   }
 };
