@@ -19,7 +19,8 @@ app.use(
 app.use(express.json());
 
 // Rotas principais
-app.use('/api/cars', require('./routes/Routes.js'));
+app.use('/api/cars', require('./routes/carRoutes.js'));
+app.use('/api/clients', require('./routes/clientRoutes.js'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
