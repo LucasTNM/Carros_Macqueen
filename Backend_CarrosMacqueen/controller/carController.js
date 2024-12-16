@@ -1,44 +1,24 @@
 const Car = require('../models/carModel');
 
 exports.createCar = async (req, res) => {
-    try {
-      const { name, class: carClass, year, price, image } = req.body;
-  
-      if (!name || !carClass || !year || !price) {
-        return res.status(400).json({ message: 'Os campos name, class, year e price são obrigatórios.' });
-      }
-  
-      const car = new Car({ name, class: carClass, year, price, image });
-      await car.save();
-      res.status(201).json(car);
-    } catch (error) {
-      console.error(`Erro ao criar carro: ${error.message}`);
-      res.status(500).json({ message: 'Erro ao criar carro', error: error.message });
-    }
-  };
-  
+  try {
+    const { name, class: carClass, year, price, image } = req.body;
+    const car = new Car({ name, class: carClass, year, price, image });
+    await car.save();
+    res.status(201).json(car);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao criar carro', error: error.message });
+  }
+};
 
-  exports.getCars = async (req, res) => {
-    try {
-      const { page = 1, limit = 10 } = req.query; // Default: página 1, 10 itens por página
-      const cars = await Car.find()
-        .skip((page - 1) * limit)
-        .limit(parseInt(limit));
-      
-      const totalCars = await Car.countDocuments();
-  
-      res.json({
-        total: totalCars,
-        page: parseInt(page),
-        limit: parseInt(limit),
-        data: cars,
-      });
-    } catch (error) {
-      console.error(`Erro ao buscar carros: ${error.message}`);
-      res.status(500).json({ message: 'Erro ao buscar carros', error: error.message });
-    }
-  };
-  
+exports.getCars = async (req, res) => {
+  try {
+    const cars = await Car.find();
+    res.json(cars);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar carros', error: error.message });
+  }
+};
 
 exports.getCarByName = async (req, res) => {
   try {
@@ -60,20 +40,15 @@ exports.updateCarByName = async (req, res) => {
   }
 };
 
-exports.getCarByName = async (req, res) => {
-    try {
-      const car = await Car.findOne({ name: req.params.name }).exec();
-      if (!car) {
-        return res.status(404).json({ success: false, message: 'Carro não encontrado' });
-      }
-      res.json({ success: true, data: car });
-    } catch (error) {
-      console.error(`Erro ao buscar carro: ${error.message}`);
-      res.status(500).json({ success: false, message: 'Erro ao buscar carro', error: error.message });
-    }
+exports.deleteCarByName = async (req, res) => {
+  try {
+    const car = await Car.findOneAndDelete({ name: req.params.name });
+    if (!car) return res.status(404).json({ message: 'Carro não encontrado' });
+    res.json({ message: 'Carro deletado com sucesso' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao deletar carro', error: error.message });
+  }
 };
-  
-  
 
 exports.getCarsByClass = async (req, res) => {
   try {
