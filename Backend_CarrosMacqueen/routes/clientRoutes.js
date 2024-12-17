@@ -6,6 +6,4 @@ const clientController = require('../controller/clientController');
 router.post('/', clientController.createClient);
 router.get('/', clientController.getClients);
 
-// Outras rotas para clientes podem ser adicionadas aqui
-
 module.exports = router;
