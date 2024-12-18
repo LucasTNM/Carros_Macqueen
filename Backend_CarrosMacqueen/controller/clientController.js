@@ -2,12 +2,12 @@ const Client = require('../models/clientModel');
 
 exports.createClient = async (req, res) => {
   try {
-    const { name, CPF, email, phone, address, birthdate } = req.body;
-    if (!name || !CPF || !email || !phone || !address || !birthdate) {
+    const { name, CPF, email, phone, DateOfBirth, password, address, cards } = req.body;
+    if (!name || !CPF || !email || !phone || !DateOfBirth || !password || !address) {
       return res.status(400).json({ message: 'Preencha todos os campos' });
     }
 
-    const client = new Client({ name, CPF, email, phone, address, birthdate });
+    const client = new Client({ name, CPF, email, phone, DateOfBirth, password, address, cards });
     await client.save();
     res.status(201).json(client);
   } catch (error) {
