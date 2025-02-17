@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { Link } from 'react-router-dom';
 import SearchFilter from './SearchFilter';
-import Header from './Header';
-import Navbar from './Navbar';
 
 const CarListPage = () => {
   const [cars, setCars] = useState([]); // Lista completa de carros
@@ -41,7 +39,7 @@ const CarListPage = () => {
       justifyItems: 'center',
     },
     carItem: {
-      backgroundColor: '#fff',
+      backgroundColor: '#333',
       borderRadius: '10px',
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
       width: '100%',
@@ -58,6 +56,9 @@ const CarListPage = () => {
     carDetails: {
       marginTop: '1rem',
     },
+    carInfo: {
+      color: 'white',
+    },
     carLink: {
       display: 'inline-block',
       marginTop: '1rem',
@@ -72,8 +73,6 @@ const CarListPage = () => {
 
   return (
     <div style={styles.container}>
-      <Header />
-      <Navbar />
       <h1>Confira nosso estoque:</h1>
       <SearchFilter cars={cars} onFilter={setFilteredCars} />
       {loading ? (
@@ -91,9 +90,9 @@ const CarListPage = () => {
                   style={styles.carImage}
                 />
                 <div style={styles.carDetails}>
-                  <h3>{car.name}</h3>
-                  <p>Modelo: {car.class}</p>
-                  <p>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
+                  <h3 style ={styles.carInfo}>{car.name}</h3>
+                  <p style ={styles.carInfo}>Modelo: {car.class}</p>
+                  <p style ={styles.carInfo}>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
                   <Link to={`/car/${car.name}`} style={styles.carLink}>
                     Detalhes
                   </Link>

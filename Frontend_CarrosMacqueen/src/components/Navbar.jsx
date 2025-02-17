@@ -6,16 +6,24 @@ const Navbar = () => {
     <nav style={styles.nav}>
       <ul style={styles.navLinks}>
         <li>
-          <Link to="/" style={styles.link}>Página Inicial</Link>
+          <Link to="/" style={styles.link}>
+            <button style={styles.button}>Página Inicial</button>
+          </Link>
         </li>
         <li>
-          <Link to="/cars" style={styles.link}>Estoque</Link>
+          <Link to="/cars" style={styles.link}>
+            <button style={styles.button}>Estoque</button>
+          </Link>
         </li>
         <li>
-          <Link to="/about" style={styles.link}>Sobre Nós</Link>
+          <Link to="/about" style={styles.link}>
+            <button style={styles.button}>Sobre Nós</button>
+          </Link>
         </li>
         <li>
-          <Link to="/payment" style={styles.link}>Carrinho</Link>
+          <Link to="/payment" style={styles.link}>
+            <button style={styles.button}>Carrinho</button>
+          </Link>
         </li>
       </ul>
     </nav>
@@ -35,10 +43,18 @@ const styles = {
     padding: 0,
   },
   link: {
-    color: '#fff',
     textDecoration: 'none',
+  },
+  button: {
+    color: '#fff',
+    backgroundColor: '#007bff',
+    border: 'none',
+    padding: '10px 20px',
     fontSize: '18px',
     margin: '0 15px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+    textDecoration: 'none',
   },
 };
 

@@ -1,11 +1,6 @@
 /* Garantir que o #root ocupe 100% da largura da tela disponível e seja centralizado */
 #root {
   width: 100%;              /* Ocupa toda a largura da tela disponível */
-  max-width: 1200px;        /* Limita a largura máxima a 1200px */
-  margin: 0 auto;           /* Centraliza o conteúdo horizontalmente */
-  padding: 2rem;            /* Adiciona espaçamento interno ao redor do conteúdo */
-  text-align: center;       /* Centraliza o texto dentro do conteúdo */
-  box-sizing: border-box;   /* Inclui padding e border no cálculo da largura e altura */
 }
 
 /* Estilos para o corpo da página, garantindo que o conteúdo ocupe toda a altura da tela */

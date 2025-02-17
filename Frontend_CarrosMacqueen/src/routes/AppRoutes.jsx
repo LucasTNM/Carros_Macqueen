@@ -5,15 +5,17 @@ import CarListPage from '../components/CarListPage';
 import AboutPage from '../components/aboutPage/AboutPage';
 import PaymentPage from '../components/PaymentPage';
 import Confirmation from '../components/Confirmation';
-
+import Navbar from '../components/Navbar';
+import Header from '../components/Header';
+import Card from '../components/Card';
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<HomePage />} />
-    <Route path="/cars" element={<CarListPage />}/>
-    <Route path="/about" element={<AboutPage />}/>
-    <Route path="/payment" element={<PaymentPage />} />
-    <Route path="/confirmation" element={<Confirmation />} />
+    <Route path="/" element={<div><Header/><Navbar/><HomePage/><Card /></div>} />
+    <Route path="/cars" element={<div><Header/><Navbar/><CarListPage /></div>}/>
+    <Route path="/about" element={<div><Header/><Navbar/><AboutPage /></div>}/>
+    <Route path="/payment" element={<div><Header/><Navbar/><PaymentPage /></div>} />
+    <Route path="/confirmation" element={<div><Header/><Navbar/><Confirmation /></div>} />
   </Routes>
 );
 

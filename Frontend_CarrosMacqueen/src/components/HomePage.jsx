@@ -1,12 +1,9 @@
 import React from 'react';
-import Header from './Header';
-import Navbar from './Navbar';
 
 const HomePage = () => {
   return (
     <div style={styles.container}>
-      <Header />
-      <Navbar />
+      <p>Confira nossa seleção de Carros!</p>
     </div>
   );
 };

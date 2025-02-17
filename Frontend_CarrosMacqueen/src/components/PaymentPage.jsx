@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar"; 
+import Header from "./Header";
 
 function PaymentPage() {
     const [paymentMethod, setPaymentMethod] = useState('Crédito');
@@ -16,16 +18,6 @@ function PaymentPage() {
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center' }}>
-            
-            <header style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 20px', borderBottom: '1px solid #000' }}>
-                <div style={{ width: '50px', height: '50px', backgroundColor: '#888', display: 'inline-block' }}></div>
-                <nav>
-                    <a href="#catalogo" style={{ margin: '0 15px', textDecoration: 'none', color: 'black' }}>Catálogo</a>
-                    <a href="#contato" style={{ margin: '0 15px', textDecoration: 'none', color: 'black' }}>Contato</a>
-                </nav>
-                <input type="text" placeholder="Pesquisar" style={{ padding: '5px', border: '1px solid #000', borderRadius: '4px' }} disabled />
-            </header>
-
             <main style={{ backgroundColor: '#ccc', margin: '50px auto', padding: '20px', width: '300px', borderRadius: '8px' }}>
                 <h2>Pagamento</h2>
                 <div style={{ textAlign: 'left', marginBottom: '10px' }}>

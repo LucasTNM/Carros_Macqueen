@@ -22,27 +22,28 @@ const styles = {
   header: {
     display: 'flex',
     justifyContent: 'space-between',
-    fontSize: '30px',
     alignItems: 'center',
-    padding: '10px 20px',
+    padding: '20px 40px',
     backgroundColor: '#333',
     color: '#fff',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   logo: {
     width: '150px',
     borderRadius: '50%',
   },
   contactInfo: {
-    textAlign: 'right',
+    fontSize:'1.5rem',
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
+    flexDirection: 'row', 
+    alignItems: 'center',
+    textAlign: 'left', 
   },
   contactItem: {
-    margin: '5px 0',
+    margin: '0 10px',
   },
   contactLink: {
-    color: '#fff',
+    color: '#007bff',
     textDecoration: 'none',
   },
 };
