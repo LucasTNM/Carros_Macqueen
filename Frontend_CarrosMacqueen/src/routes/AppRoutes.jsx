@@ -8,6 +8,7 @@ import Confirmation from '../components/Confirmation';
 import Navbar from '../components/Navbar';
 import Header from '../components/Header';
 import Card from '../components/Card';
+import Login from '../components/Login/Login';
 
 const AppRoutes = () => (
   <Routes>
@@ -16,6 +17,7 @@ const AppRoutes = () => (
     <Route path="/about" element={<div><Header/><Navbar/><AboutPage /></div>}/>
     <Route path="/payment" element={<div><Header/><Navbar/><PaymentPage /></div>} />
     <Route path="/confirmation" element={<div><Header/><Navbar/><Confirmation /></div>} />
+    <Route path="/login" element={<div><Header/><Navbar/><Login /></div>} />
   </Routes>
 );
 

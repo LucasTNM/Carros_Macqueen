@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -13,6 +14,9 @@ const Header = () => {
             contato@carrosmacqueen.com
           </a>
         </p>
+        <Link to="/login" style={styles.contactItem}>
+          <button style={styles.button}>Login</button>
+        </Link>
       </div>
     </header>
   );
@@ -33,17 +37,28 @@ const styles = {
     borderRadius: '50%',
   },
   contactInfo: {
-    fontSize:'1.5rem',
+    fontSize: '1.5rem',
     display: 'flex',
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
-    textAlign: 'left', 
+    textAlign: 'left',
   },
   contactItem: {
     margin: '0 10px',
   },
   contactLink: {
     color: '#007bff',
+    textDecoration: 'none',
+  },
+  button: {
+    color: '#fff',
+    backgroundColor: '#007bff',
+    border: 'none',
+    padding: '10px 20px',
+    fontSize: '18px',
+    margin: '0 15px',
+    cursor: 'pointer',
+    borderRadius: '5px',
     textDecoration: 'none',
   },
 };
