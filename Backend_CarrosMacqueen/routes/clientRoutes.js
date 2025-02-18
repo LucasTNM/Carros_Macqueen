@@ -6,5 +6,6 @@ const clientController = require('../controller/clientController');
 router.post('/', clientController.createClient);
 router.get('/', clientController.getClients);
 router.post('/login', clientController.loginClient);
+router.delete('/:cpf', clientController.deleteClient);
 
 module.exports = router;
