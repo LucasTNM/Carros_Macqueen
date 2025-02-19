@@ -17,6 +17,9 @@ const Header = () => {
         <Link to="/login" style={styles.contactItem}>
           <button style={styles.button}>Login</button>
         </Link>
+        <Link to="/Cadastro" style={styles.contactItem}>
+          <button style={styles.button}>Cadastro</button>
+        </Link>
       </div>
     </header>
   );
