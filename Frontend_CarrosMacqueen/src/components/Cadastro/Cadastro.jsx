@@ -105,7 +105,6 @@ const Cadastro = () => {
           value={formData.address}
           onChange={handleChange}
         />
-
         {error && <p className="error">{error}</p>}
 
         <button type="submit">Cadastrar</button>
