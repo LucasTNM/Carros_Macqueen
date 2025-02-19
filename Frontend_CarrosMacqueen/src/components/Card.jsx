@@ -1,54 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
-import api from '../api';
 
-function Card() {
-  const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Card = ({ carName }) => {
+  const [car, setCar] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchClasses = async () => {
+    const fetchCar = async () => {
       try {
-        const response = await api.get('http://localhost:5000/api/cars/class');
-        setClasses(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Erro ao carregar as classes', error);
-        setLoading(false);
+        const response = await axios.get(`http://localhost:5000/api/cars/${carName}`);
+        setCar(response.data);
+      } catch (err) {
+        setError('Erro ao buscar informações do carro');
+        console.error(err);
       }
     };
 
-    fetchClasses();
-  }, []);
+    fetchCar();
+  }, [carName]);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!car) {
+    return <p>Carregando...</p>;
+  }
 
   const styles = {
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      textAlign: 'center',
-    },
-    p: {
-      color: 'black',
-    },
-    classList: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-      gap: '20px',
-      justifyItems: 'center',
-    },
-    classItem: {
+    carItem: {
       backgroundColor: '#333',
       borderRadius: '10px',
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-      width: '100%',
-      maxWidth: '300px',
       overflow: 'hidden',
       textAlign: 'left',
       padding: '1rem',
+      width: '300px', // Largura fixa para todos os cards
+      height: '350px', // Altura fixa para uniformidade
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      margin: '10px', // Margem para espaçamento entre os cards
+    },
+    carImage: {
+      width: '100%',
+      height: '200px', // Altura fixa para a imagem
+      objectFit: 'cover',
+      borderRadius: '8px',
+    },
+    carDetails: {
+      marginTop: '1rem',
+      flexGrow: 1,
+    },
+    carInfo: {
       color: 'white',
     },
-    classLink: {
+    carLink: {
       display: 'inline-block',
       marginTop: '1rem',
       color: '#007bff',
@@ -58,28 +66,20 @@ function Card() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1>Classes de Carros</h1>
-      {loading ? (
-        <p style ={styles.p}>Carregando classes...</p>
-      ) : (
-        <div style={styles.classList}>
-          {classes.length === 0 ? (
-            <p style ={styles.p}>Nenhuma classe encontrada.</p>
-          ) : (
-            classes.map((car, index) => (
-              <div style={styles.classItem} key={index}>
-                <h3>{carClass}</h3>
-                <Link to={`/class/${car.class}`} style={styles.classLink}>
-                  Ver Carros
-                </Link>
-              </div>
-            ))
-          )}
-        </div>
-      )}
+    <div style={styles.carItem} key={car._id}>
+      <img
+        src={car.image}
+        alt={car.name}
+        style={styles.carImage}
+      />
+      <div style={styles.carDetails}>
+        <h3 style={styles.carInfo}>{car.class + "s"}</h3>
+        <Link to={`http://localhost:5173/cars?class=${car.class}`} style={styles.carLink}>
+          Ir para classe {car.class + "s"}
+        </Link>
+      </div>
     </div>
   );
-}
+};
 
 export default Card;

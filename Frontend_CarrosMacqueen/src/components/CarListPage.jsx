@@ -108,9 +108,9 @@ const CarListPage = () => {
                   <h3 style={styles.carInfo}>{car.name}</h3>
                   <p style={styles.carInfo}>Modelo: {car.class}</p>
                   <p style={styles.carInfo}>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
-                  <Link to={`/car/${car.name}`} style={styles.carLink}>
-                    Detalhes
-                  </Link>
+                  <Link to={`http://localhost:5173/cars?class=${car.class}`} style={styles.carLink}>
+                            Ir para Carros Esportivos
+                          </Link>
                 </div>
               </div>
             ))
