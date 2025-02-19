@@ -80,7 +80,6 @@ exports.deleteClient = async (req, res) => {
 };
 
 exports.loginClient = async (req, res) => {
-  console.log("Requisição recebida:", req.body); // 🔥 Debug
 
   const { email, password } = req.body;
   try {

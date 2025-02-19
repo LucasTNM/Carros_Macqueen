@@ -11,6 +11,16 @@ import Card from "../components/Card";
 import Login from "../components/Login/Login";
 import Cadastro from "../components/Cadastro/Cadastro";
 
+const style = {
+  cardContainer: {
+    display: 'flex', // Usar flexbox para alinhar os cards em linha
+    justifyContent: 'center', // Centraliza os cards
+    gap: '20px', // Espaço entre os cards
+    margin: '10px auto', // Margem do contêiner
+    flexWrap: 'wrap', // Permite que os cards quebrem para a próxima linha se necessário
+  },
+};
+
 const AppRoutes = () => (
   <Routes>
     <Route
@@ -20,7 +30,10 @@ const AppRoutes = () => (
           <Header />
           <Navbar />
           <HomePage />
-          <Card />
+          <div style={style.cardContainer}>
+          <Card carName="Bugatti EB 110 SS" />
+          <Card carName="/Mustang GTX350"/>
+          </div>
         </div>
       }
     />
@@ -80,7 +93,7 @@ const AppRoutes = () => (
         <div>
           <Header />
           <Navbar />
-          <Login />
+          <Cadastro />
         </div>
       }
     />
