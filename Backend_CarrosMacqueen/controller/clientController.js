@@ -2,51 +2,59 @@ const Client = require("../models/clientModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+// Função auxiliar para criar um cliente
+const handleClientCreation = async (clientData) => {
+  const { name, CPF, email, phone, DateOfBirth, password, address, cards } =
+    clientData;
+
+  // Verifica se todos os campos obrigatórios foram preenchidos
+  if (
+    !name ||
+    !CPF ||
+    !email ||
+    !phone ||
+    !DateOfBirth ||
+    !password ||
+    !address
+  ) {
+    throw new Error("Preencha todos os campos");
+  }
+
+  // Valida a senha (mínimo 8 caracteres, 1 maiúscula e 1 caractere especial)
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+  if (!passwordRegex.test(password)) {
+    throw new Error(
+      "A senha deve ter no mínimo 8 dígitos, um caractere especial e uma letra maiúscula"
+    );
+  }
+
+  // Criptografa a senha
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Cria um novo cliente
+  const client = new Client({
+    name,
+    CPF,
+    email,
+    phone,
+    DateOfBirth,
+    password: hashedPassword,
+    address,
+    cards,
+  });
+
+  await client.save();
+  return client;
+};
+
+// Controller para criar cliente (usado para outras funções)
 exports.createClient = async (req, res) => {
   try {
-    const { name, CPF, email, phone, DateOfBirth, password, address, cards } =
-      req.body;
-    if (
-      !name ||
-      !CPF ||
-      !email ||
-      !phone ||
-      !DateOfBirth ||
-      !password ||
-      !address
-    ) {
-      return res.status(400).json({ message: "Preencha todos os campos" });
-    }
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
-    if (!passwordRegex.test(password)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "A senha deve ter no mínimo 8 dígitos, um caractere especial e uma letra maiúscula",
-        });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const client = new Client({
-      name,
-      CPF,
-      email,
-      phone,
-      DateOfBirth,
-      password: hashedPassword,
-      address,
-      cards,
-    });
-    await client.save();
+    const client = await handleClientCreation(req.body);
     res.status(201).json(client);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Erro ao criar cliente", error: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -55,12 +63,10 @@ exports.getClients = async (req, res) => {
     const clients = await Client.find();
     res.status(200).json(clients);
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Erro ao buscar por clientes cadastrados",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Erro ao buscar por clientes cadastrados",
+      error: error.message,
+    });
   }
 };
 
@@ -121,46 +127,19 @@ exports.loginClient = async (req, res) => {
   }
 };
 
+// Controller de cadastro de cliente
 exports.cadastroClient = async (req, res) => {
   try {
-    const { name, CPF, email, phone, DateOfBirth, password, address, cards } =
-      req.body;
+    const { email } = req.body;
 
-    // Verifica se todos os campos foram preenchidos
-    if (
-      !name ||
-      !CPF ||
-      !email ||
-      !phone ||
-      !DateOfBirth ||
-      !password ||
-      !address
-    ) {
-      return res.status(400).json({ message: "Preencha todos os campos" });
-    }
-
-    // Verifica se o email já está cadastrado
+    // Verifica se o e-mail já está cadastrado
     const existingClient = await Client.findOne({ email });
     if (existingClient) {
       return res.status(400).json({ message: "Email já cadastrado" });
     }
 
-    // Criptografa a senha antes de salvar no banco de dados
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Cria o novo cliente
-    const newClient = new Client({
-      name,
-      CPF,
-      email,
-      phone,
-      DateOfBirth,
-      password: hashedPassword, // Salva a senha criptografada
-      address,
-      cards,
-    });
-
-    await newClient.save(); // Salva no banco de dados
+    // Cria o cliente usando a função reutilizável
+    const newClient = await handleClientCreation(req.body);
 
     // Gera um token JWT para autenticação
     const token = jwt.sign({ id: newClient._id }, process.env.JWT_SECRET, {
