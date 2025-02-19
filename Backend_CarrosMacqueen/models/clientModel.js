@@ -20,16 +20,4 @@ const clientSchema = new mongoose.Schema(
 // Configura o plugin AutoIncrement para iniciar a contagem dos IDs a partir de 1
 clientSchema.plugin(AutoIncrement, { inc_field: 'clientId', start_seq: 1 });
 
-// Middleware para hash da senha antes de salvar
-clientSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
 module.exports = mongoose.model('Client', clientSchema);

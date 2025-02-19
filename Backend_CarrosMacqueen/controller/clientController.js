@@ -48,21 +48,38 @@ exports.deleteClient = async (req, res) => {
 };
 
 exports.loginClient = async (req, res) => {
+  console.log("Requisição recebida:", req.body); // 🔥 Debug
+
   const { email, password } = req.body;
   try {
-    const client = await Client.findOne({ email });
+    const client = await Client.findOne({ email: email.trim().toLowerCase() });
+
     if (!client) {
-      return res.status(401).json({ message: 'Email ou senha inválidos' });
+      console.log("Email não encontrado:", email);
+      return res.status(401).json({ message: "Email inválido" });
     }
 
     const isMatch = await bcrypt.compare(password, client.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Email ou senha inválidos' });
+      console.log("Senha incorreta para:", email);
+      return res.status(401).json({ message: "Senha inválida" });
     }
 
-    const token = jwt.sign({ id: client._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign({ id: client._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    console.log("Login bem-sucedido! Token gerado:", token); // 🔥 Debug
+
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      sameSite: "none",
+      partitioned: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: true,
+    });
+
+    res.status(201).json({ success: true, token, message: "Você fez login com sucesso." });
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao fazer login', error: error.message });
+    console.error("Erro ao fazer login:", error);
+    res.status(500).json({ message: "Erro ao fazer login", error: error.message });
   }
 };

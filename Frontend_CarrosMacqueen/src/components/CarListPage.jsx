@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import api from '../api';
 import { Link } from 'react-router-dom';
 import SearchFilter from './SearchFilter';
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const CarListPage = () => {
   const [cars, setCars] = useState([]); // Lista completa de carros
   const [loading, setLoading] = useState(true);
   const [filteredCars, setFilteredCars] = useState([]); // Lista filtrada de carros
+  const query = useQuery();
+  const carClass = query.get('class');
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -23,6 +30,14 @@ const CarListPage = () => {
 
     fetchCars();
   }, []);
+
+  useEffect(() => {
+    if (carClass) {
+      setFilteredCars(cars.filter(car => car.class === carClass));
+    } else {
+      setFilteredCars(cars);
+    }
+  }, [carClass, cars]);
 
   // Estilos para a página
   const styles = {
@@ -90,9 +105,9 @@ const CarListPage = () => {
                   style={styles.carImage}
                 />
                 <div style={styles.carDetails}>
-                  <h3 style ={styles.carInfo}>{car.name}</h3>
-                  <p style ={styles.carInfo}>Modelo: {car.class}</p>
-                  <p style ={styles.carInfo}>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
+                  <h3 style={styles.carInfo}>{car.name}</h3>
+                  <p style={styles.carInfo}>Modelo: {car.class}</p>
+                  <p style={styles.carInfo}>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
                   <Link to={`/car/${car.name}`} style={styles.carLink}>
                     Detalhes
                   </Link>
