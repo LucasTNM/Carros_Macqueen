@@ -29,7 +29,7 @@ const Cadastro = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/clients/cadastro",
+        "http://localhost:5173/api/clients/cadastro",
         formData
       );
 
