@@ -13,7 +13,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 80px); /* Ajusta a altura para considerar a Header e Navbar */
+  height: calc(
+    100vh - 80px
+  ); /* Ajusta a altura para considerar a Header e Navbar */
   background-color: #50a3a2;
 }
 
@@ -48,6 +50,7 @@ body {
   background-color: white;
   border: 0;
   padding: 10px 15px;
+  font-weight: bold;
   color: #50a3a2;
   border-radius: 3px;
   width: 100%; /* Ajusta a largura para 100% do contêiner pai */
