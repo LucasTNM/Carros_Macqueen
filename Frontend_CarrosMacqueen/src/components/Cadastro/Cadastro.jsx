@@ -12,7 +12,7 @@ const Cadastro = () => {
     DateOfBirth: "",
     password: "",
     address: "",
-    cards: "",
+    cards: [],
   });
 
   const [error, setError] = useState("");
@@ -26,10 +26,11 @@ const Cadastro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Limpa erros anteriores
+    console.log(formData.DateOfBirth);
 
     try {
       const response = await axios.post(
-        "http://localhost:5173/api/clients/cadastro",
+        "http://localhost:5000/api/clients/cadastro",
         formData
       );
 
@@ -43,7 +44,7 @@ const Cadastro = () => {
         DateOfBirth: "",
         password: "",
         address: "",
-        cards: "",
+        cards: [],
       });
 
       navigate("/"); // Redireciona após o cadastro bem-sucedido
@@ -102,13 +103,6 @@ const Cadastro = () => {
           name="address"
           placeholder="Endereço"
           value={formData.address}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="cards"
-          placeholder="Cartão (opcional)"
-          value={formData.cards}
           onChange={handleChange}
         />
 
