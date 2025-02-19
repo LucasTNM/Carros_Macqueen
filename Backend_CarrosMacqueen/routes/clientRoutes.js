@@ -7,6 +7,6 @@ router.post("/", clientController.createClient);
 router.get("/", clientController.getClients);
 router.post("/login", clientController.loginClient);
 router.delete("/:cpf", clientController.deleteClient);
-router.post("/cadastro", clientController.cadastroClient);
+router.post("/cadastro", clientController.createClient);
 
 module.exports = router;

@@ -12,6 +12,7 @@ const Cadastro = () => {
     DateOfBirth: "",
     password: "",
     address: "",
+    cards: [],
   });
 
   const [error, setError] = useState("");
@@ -25,10 +26,11 @@ const Cadastro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Limpa erros anteriores
+    console.log(formData.DateOfBirth);
 
     try {
       const response = await axios.post(
-        "http://localhost:5173/api/clients/cadastro",
+        "http://localhost:5000/api/clients/cadastro",
         formData
       );
 
@@ -42,6 +44,7 @@ const Cadastro = () => {
         DateOfBirth: "",
         password: "",
         address: "",
+        cards: [],
       });
 
       navigate("/"); // Redireciona após o cadastro bem-sucedido
