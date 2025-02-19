@@ -55,59 +55,59 @@ const Cadastro = () => {
   return (
     <div className="cadastro-container">
       <form className="form" onSubmit={handleSubmit}>
-        <Input
+        <input
           type="text"
           name="name"
-          holder="Nome"
+          placeholder="Nome"
           value={formData.name}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="text"
           name="CPF"
-          holder="CPF"
+          placeholder="CPF"
           value={formData.CPF}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="email"
           name="email"
-          holder="Email"
+          placeholder="Email"
           value={formData.email}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="text"
           name="phone"
-          holder="Telefone"
+          placeholder="Telefone"
           value={formData.phone}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="date"
           name="DateOfBirth"
-          holder="Data de Nascimento"
+          placeholder="Data de Nascimento"
           value={formData.DateOfBirth}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="password"
           name="password"
-          holder="Senha"
+          placeholder="Senha"
           value={formData.password}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="text"
           name="address"
-          holder="Endereço"
+          placeholder="Endereço"
           value={formData.address}
           onChange={handleChange}
         />
-        <Input
+        <input
           type="text"
           name="cards"
-          holder="Cartão (opcional)"
+          placeholder="Cartão (opcional)"
           value={formData.cards}
           onChange={handleChange}
         />
