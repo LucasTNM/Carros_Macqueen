@@ -12,7 +12,6 @@ const Cadastro = () => {
     DateOfBirth: "",
     password: "",
     address: "",
-    cards: "",
   });
 
   const [error, setError] = useState("");
@@ -43,7 +42,6 @@ const Cadastro = () => {
         DateOfBirth: "",
         password: "",
         address: "",
-        cards: "",
       });
 
       navigate("/"); // Redireciona após o cadastro bem-sucedido
@@ -104,14 +102,6 @@ const Cadastro = () => {
           value={formData.address}
           onChange={handleChange}
         />
-        <input
-          type="text"
-          name="cards"
-          placeholder="Cartão (opcional)"
-          value={formData.cards}
-          onChange={handleChange}
-        />
-
         {error && <p className="error">{error}</p>}
 
         <button type="submit">Cadastrar</button>
