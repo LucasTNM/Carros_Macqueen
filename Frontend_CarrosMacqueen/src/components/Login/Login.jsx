@@ -51,6 +51,10 @@ const Login = () => {
     }
   };
 
+  const handlePasswordReset = () => {
+    navigate("/password-reset");
+  };
+
   return (
     <div className="login-container">
   {isLoggedIn ? (
@@ -74,6 +78,7 @@ const Login = () => {
       />
       {error && <p className="error">{error}</p>}
       <button type="submit">Login</button>
+      <button type="button" onClick={handlePasswordReset}>Esqueceu sua senha?</button>
     </form>
   )}
 </div>

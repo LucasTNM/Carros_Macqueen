@@ -1,13 +1,12 @@
 const Client = require("../models/clientModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 
-// Função auxiliar para criar um cliente
 const handleClientCreation = async (clientData) => {
   const { name, CPF, email, phone, DateOfBirth, password, address, cards } =
     clientData;
 
-  // Verifica se todos os campos obrigatórios foram preenchidos
   if (
     !name ||
     !CPF ||
@@ -20,7 +19,6 @@ const handleClientCreation = async (clientData) => {
     throw new Error("Preencha todos os campos");
   }
 
-  // Valida a senha (mínimo 8 caracteres, 1 maiúscula e 1 caractere especial)
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
   if (!passwordRegex.test(password)) {
     throw new Error(
@@ -28,11 +26,9 @@ const handleClientCreation = async (clientData) => {
     );
   }
 
-  // Criptografa a senha
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // Cria um novo cliente
   const client = new Client({
     name,
     CPF,
@@ -48,7 +44,6 @@ const handleClientCreation = async (clientData) => {
   return client;
 };
 
-// Controller para criar cliente (usado para outras funções)
 exports.createClient = async (req, res) => {
   try {
     const client = await handleClientCreation(req.body);
@@ -106,7 +101,7 @@ exports.loginClient = async (req, res) => {
       expiresIn: "1h",
     });
 
-    console.log("Login bem-sucedido! Token gerado:", token); // 🔥 Debug
+    console.log("Login bem-sucedido! Token gerado:", token); 
 
     res.cookie("authToken", token, {
       httpOnly: true,
@@ -127,29 +122,122 @@ exports.loginClient = async (req, res) => {
   }
 };
 
-// Controller de cadastro de cliente
-exports.cadastroClient = async (req, res) => {
-  try {
-    const { email } = req.body;
+const sendResetEmail = async (email, code) => {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true para 465, false para outras portas
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
-    // Verifica se o e-mail já está cadastrado
-    const existingClient = await Client.findOne({ email });
-    if (existingClient) {
-      return res.status(400).json({ message: "Email já cadastrado" });
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Código de Redefinição de Senha",
+    text: `Você solicitou a redefinição de sua senha. Use o código abaixo para redefinir sua senha:\n\n${code}\n\nSe você não solicitou isso, por favor ignore este email.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+const generateResetCode = () => {
+  return Math.floor(1000 + Math.random() * 9000).toString(); // Gera um código de 4 dígitos
+};
+
+exports.passwordReset = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    console.log(`Solicitação de redefinição de senha recebida para o email: ${email}`);
+
+    const client = await Client.findOne({ email: email.trim().toLowerCase() });
+
+    if (!client) {
+      console.log("Email não encontrado:", email);
+      return res.status(404).json({ message: "Email não encontrado" });
     }
 
-    // Cria o cliente usando a função reutilizável
-    const newClient = await handleClientCreation(req.body);
+    const code = generateResetCode();
+    client.resetCode = code;
+    client.resetCodeExpires = Date.now() + 3600000; // Código expira em 1 hora
+    await client.save();
 
-    // Gera um token JWT para autenticação
-    const token = jwt.sign({ id: newClient._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    console.log(`Código de redefinição gerado: ${code} para o email: ${email}`);
+
+    await sendResetEmail(email, code);
+
+    console.log(`Email de redefinição de senha enviado para: ${email}`);
+
+    res.status(200).json({ message: "Código de redefinição de senha enviado" });
+  } catch (error) {
+    console.error("Erro ao solicitar redefinição de senha:", error);
+    res.status(500).json({ message: "Erro ao solicitar redefinição de senha", error: error.message });
+  }
+};
+
+exports.verifyResetCode = async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    // Garantir que o email e o código foram fornecidos
+    if (!email || !code) {
+      console.log("E-mail e código são obrigatórios.");
+      return res.status(400).json({ message: "E-mail e código são obrigatórios." });
+    }
+
+    // Buscar cliente pelo email e código de redefinição
+    const client = await Client.findOne({
+      email: email.trim().toLowerCase(),
+      resetCode: code,
     });
 
-    res.status(201).json({ message: "Cadastro realizado com sucesso!", token });
+    // Verificar se o cliente existe e se o código está expirado
+    if (!client || !client.resetCodeExpires || client.resetCodeExpires < Date.now()) {
+      console.log("Código inválido ou expirado.");
+      return res.status(400).json({ message: "Código inválido ou expirado." });
+    }
+
+    // Verificar se a chave secreta do JWT está definida
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET não está definido no ambiente.");
+      return res.status(500).json({ message: "Erro interno do servidor." });
+    }
+
+    // Gerar token JWT válido por 1 hora
+    const token = jwt.sign({ id: client._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    console.log("Código verificado com sucesso. Token gerado:", token);
+
+    res.status(200).json({ token });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Erro ao cadastrar cliente", error: error.message });
+    console.error("Erro ao verificar código de redefinição:", error);
+    res.status(500).json({ message: "Erro interno do servidor." });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const client = await Client.findById(decoded.id);
+
+    if (!client) {
+      return res.status(404).json({ message: "Cliente não encontrado" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    client.password = await bcrypt.hash(password, salt);
+    client.resetCode = undefined;
+    client.resetCodeExpires = undefined;
+    await client.save();
+
+    res.status(200).json({ message: "Senha redefinida com sucesso" });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao redefinir a senha", error: error.message });
   }
 };

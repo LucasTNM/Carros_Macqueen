@@ -26,7 +26,6 @@ const Cadastro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Limpa erros anteriores
-    console.log(formData.DateOfBirth);
 
     try {
       const response = await axios.post(
