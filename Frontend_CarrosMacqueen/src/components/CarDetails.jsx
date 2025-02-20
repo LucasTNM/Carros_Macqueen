@@ -22,17 +22,41 @@ const CarDetails = () => {
     fetchCarDetails();
   }, [carName]);
 
-  const handleBuyClick = () => {
-    navigate('/payment');
-  };
-
-  const handleAddToCartClick = async () => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'; // Verifica se o usuário está autenticado
-    const username = localStorage.getItem('username'); // Obtém o email do usuário do localStorage
+  const handleBuyClick = async () => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const username = localStorage.getItem('username');
 
     if (!isAuthenticated || !username) {
       console.log('Redirecionando para login...');
-      navigate('/login'); // Redireciona para a página de login se não estiver autenticado
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.get(`http://localhost:5000/api/clients/${username}`);
+      const client = response.data;
+
+      if (client.cards && client.cards.length > 0) {
+        await axios.post('http://localhost:5000/api/cart/add', {
+          username,
+          carName: car.name,
+        });
+        navigate('/resumo-pedido');
+      } else {
+        navigate('/payment-method');
+      }
+    } catch (error) {
+      console.error('Erro ao verificar os cartões do cliente', error);
+    }
+  };
+
+  const handleAddToCartClick = async () => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const username = localStorage.getItem('username');
+
+    if (!isAuthenticated || !username) {
+      console.log('Redirecionando para login...');
+      navigate('/login');
       return;
     }
 
@@ -42,10 +66,8 @@ const CarDetails = () => {
         carName: car.name,
       });
       console.log('Resposta da requisição:', response);
-      alert('Carro adicionado ao carrinho!');
     } catch (error) {
       console.error('Erro ao adicionar carro ao carrinho', error);
-      alert('Erro ao adicionar carro ao carrinho');
     }
   };
 
@@ -91,7 +113,7 @@ const styles = {
   },
   carImage: {
     width: '100%',
-    maxWidth: '600px', // Define a largura máxima da imagem
+    maxWidth: '600px',
     height: 'auto',
     borderRadius: '10px',
     marginBottom: '20px',

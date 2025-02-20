@@ -65,3 +65,45 @@ exports.getCart = async (req, res) => {
       res.status(500).json({ message: 'Erro ao buscar carrinho', error: error.message });
     }
   };
+
+  exports.removeFromCart = async (req, res) => {
+    try {
+      const { cpf, carName } = req.params;
+  
+      const cart = await Cart.findOne({ client: cpf }).populate('items.car');
+      if (!cart || !cart.items || cart.items.length === 0) {
+        return res.status(404).json({ message: "Carrinho não encontrado ou vazio" });
+      }
+  
+      const initialLength = cart.items.length;
+      cart.items = cart.items.filter(item => item.car.name.toLowerCase() !== carName.toLowerCase());
+  
+      if (cart.items.length === initialLength) {
+        return res.status(404).json({ message: "Item não encontrado no carrinho" });
+      }
+  
+      await cart.save();
+  
+      res.status(200).json({ message: "Item removido do carrinho com sucesso", items: cart.items });
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao remover item do carrinho", error: error.message });
+    }
+  };
+  
+  exports.clearCart = async (req, res) => {
+    try {
+      const { cpf } = req.params;
+  
+      const cart = await Cart.findOne({ client: cpf });
+      if (!cart) {
+        return res.status(404).json({ message: 'Carrinho não encontrado' });
+      }
+  
+      cart.items = [];
+      await cart.save();
+  
+      res.status(200).json({ message: 'Carrinho limpo com sucesso', cart });
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao limpar o carrinho', error: error.message });
+    }
+  };

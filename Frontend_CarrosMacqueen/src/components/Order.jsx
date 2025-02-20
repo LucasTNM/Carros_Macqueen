@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Cart = () => {
+const Order = () => {
   const [cart, setCart] = useState(null);
   const [error, setError] = useState('');
   const [cpf, setCpf] = useState('');
@@ -44,21 +44,25 @@ const Cart = () => {
     fetchCart();
   }, [cpf]);
 
-  const handleRemoveItem = async (carName) => {
+  const handlePaymentClick = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/remove/${cpf}/${encodeURIComponent(carName)}`);
-      setCart((prevCart) => ({
-        ...prevCart,
-        items: prevCart.items.filter((item) => item.car.name !== carName),
-      }));
-    } catch (err) {
-      setError('Erro ao remover item do carrinho');
-      console.error(err);
-    }
-  };
+      const username = localStorage.getItem('username');
+      const response = await axios.get(`http://localhost:5000/api/clients/${username}`);
+      const client = response.data;
 
-  const handlePaymentClick = () => {
-    navigate('/resumo-pedido');
+      console.log('Client data:', client);
+
+      if (client.cards && client.cards.length > 0) {
+        console.log('Client has cards:', client.cards);
+        navigate('/compra-finalizada');
+      } else {
+        console.log('Client has no cards');
+        navigate('/payment-method');
+      }
+    } catch (err) {
+      setError('Erro ao verificar os cartões do cliente');
+      console.error('Erro ao verificar os cartões do cliente', err);
+    }
   };
 
   if (error) {
@@ -69,39 +73,36 @@ const Cart = () => {
     return <p>Carregando...</p>;
   }
 
+  const totalPrice = cart.items.reduce((total, item) => total + item.car.price * item.quantity, 0);
+
   return (
-    <div style={styles.cartContainer}>
-      <h1 style={styles.heading}>Carrinho de Compras</h1>
+    <div style={styles.orderContainer}>
+      <h1 style={styles.heading}>Resumo do Pedido</h1>
       {cart.items.length === 0 ? (
         <p>Seu carrinho está vazio.</p>
       ) : (
-        <>
-          <ul style={styles.cartList}>
-            {cart.items.map((item) => (
-              <li key={item.car._id} style={styles.cartItem}>
-                <img src={item.car.image} alt={item.car.name} style={styles.carImage} />
-                <div style={styles.carDetails}>
-                  <h2 style={styles.carName}>{item.car.name}</h2>
-                  <p style={styles.carQuantity}>Quantidade: {item.quantity}</p>
-                  <button
-                    onClick={() => handleRemoveItem(item.car.name)}
-                    style={styles.removeButton}
-                  >
-                    Remover
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <button onClick={handlePaymentClick} style={styles.paymentButton}>Ir para Pagamento</button>
-        </>
+        <ul style={styles.orderList}>
+          {cart.items.map((item) => (
+            <li key={item.car._id} style={styles.orderItem}>
+              <img src={item.car.image} alt={item.car.name} style={styles.carImage} />
+              <div style={styles.carDetails}>
+                <h2 style={styles.carName}>{item.car.name}</h2>
+                <p style={styles.carPrice}>Preço: {item.car.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                <p style={styles.carQuantity}>Quantidade: {item.quantity}</p>
+                <p style={styles.itemTotal}>Total: {(item.car.price * item.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
+      <h2 style={styles.totalPrice}>Preço Total: {totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h2>
+      <button onClick={handlePaymentClick} style={styles.paymentButton}>Confirmar Pedido</button>
     </div>
   );
 };
 
 const styles = {
-  cartContainer: {
+  orderContainer: {
     width: '80%',
     margin: '0 auto',
     textAlign: 'center',
@@ -115,11 +116,11 @@ const styles = {
     color: '#333',
     marginBottom: '20px',
   },
-  cartList: {
+  orderList: {
     listStyle: 'none',
     padding: '0',
   },
-  cartItem: {
+  orderItem: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: '20px',
@@ -142,19 +143,22 @@ const styles = {
     color: '#333',
     marginBottom: '10px',
   },
+  carPrice: {
+    fontSize: '1.2rem',
+    color: '#666',
+  },
   carQuantity: {
     fontSize: '1.2rem',
     color: '#666',
   },
-  removeButton: {
-    marginTop: '10px',
-    padding: '5px 10px',
-    fontSize: '1rem',
-    color: '#fff',
-    backgroundColor: '#ff0000',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
+  itemTotal: {
+    fontSize: '1.2rem',
+    color: '#666',
+  },
+  totalPrice: {
+    fontSize: '1.8rem',
+    color: '#333',
+    marginTop: '20px',
   },
   paymentButton: {
     marginTop: '20px',
@@ -168,4 +172,4 @@ const styles = {
   },
 };
 
-export default Cart;
+export default Order;
