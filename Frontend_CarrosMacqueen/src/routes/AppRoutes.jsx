@@ -15,6 +15,8 @@ import ResetPassword from "../components/Redefinir-senha/ResetPassword";
 import VerifyResetCode from "../components/Redefinir-senha/verifyResetCode";
 import CarDetails from "../components/CarDetails";
 import Cart from "../components/Cart";
+import Order from "../components/Order"
+import ThanksPage from "../components/ThanksPage";
 
 const style = {
   cardContainer: {
@@ -83,12 +85,20 @@ const AppRoutes = () => (
       }
     />
     <Route
-      path="/confirmation"
+      path="/resumo-pedido"
       element={
         <div>
           <Header />
           <Navbar />
-          <Confirmation />
+          <Order />
+        </div>
+      }
+    />
+    <Route
+      path="/compra-finalizada"
+      element={
+        <div>
+          <ThanksPage />
         </div>
       }
     />
