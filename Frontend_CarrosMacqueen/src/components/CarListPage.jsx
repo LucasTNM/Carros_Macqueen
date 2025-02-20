@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import api from '../api';
-import { Link } from 'react-router-dom';
-import SearchFilter from './SearchFilter';
+import React, { useState, useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
+import api from "../api";
+import SearchFilter from "./SearchFilter";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -13,17 +12,17 @@ const CarListPage = () => {
   const [loading, setLoading] = useState(true);
   const [filteredCars, setFilteredCars] = useState([]); // Lista filtrada de carros
   const query = useQuery();
-  const carClass = query.get('class');
+  const carClass = query.get("class");
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await api.get('http://localhost:5000/api/cars');
+        const response = await api.get("http://localhost:5000/api/cars");
         setCars(response.data); // Atualiza a lista completa
         setFilteredCars(response.data); // Inicializa a lista filtrada com todos os carros
         setLoading(false);
       } catch (error) {
-        console.error('Erro ao carregar os carros', error);
+        console.error("Erro ao carregar os carros", error);
         setLoading(false);
       }
     };
@@ -33,7 +32,7 @@ const CarListPage = () => {
 
   useEffect(() => {
     if (carClass) {
-      setFilteredCars(cars.filter(car => car.class === carClass));
+      setFilteredCars(cars.filter((car) => car.class === carClass));
     } else {
       setFilteredCars(cars);
     }
@@ -42,47 +41,48 @@ const CarListPage = () => {
   // Estilos para a página
   const styles = {
     container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      textAlign: 'center',
+      maxWidth: "1200px",
+      margin: "0 auto",
+      padding: "2rem",
+      textAlign: "center",
     },
     carList: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-      gap: '20px',
-      justifyItems: 'center',
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+      gap: "20px",
+      justifyItems: "center",
     },
     carItem: {
-      backgroundColor: '#333',
-      borderRadius: '10px',
-      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-      width: '100%',
-      maxWidth: '300px',
-      overflow: 'hidden',
-      textAlign: 'left',
-      padding: '1rem',
+      backgroundColor: "#333",
+      borderRadius: "10px",
+      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+      width: "100%",
+      maxWidth: "300px",
+      overflow: "hidden",
+      textAlign: "left",
+      padding: "1rem",
     },
     carImage: {
-      width: '100%',
-      height: 'auto',
-      borderRadius: '8px',
+      width: "100%",
+      height: "200px", // Define a altura fixa para as imagens
+      objectFit: "cover", // Garante que a imagem se ajuste ao contêiner sem distorção
+      borderRadius: "8px",
     },
     carDetails: {
-      marginTop: '1rem',
+      marginTop: "1rem",
     },
     carInfo: {
-      color: 'white',
+      color: "white",
     },
     carLink: {
-      display: 'inline-block',
-      marginTop: '1rem',
-      color: '#007bff',
-      textDecoration: 'none',
-      fontWeight: 'bold',
+      display: "inline-block",
+      marginTop: "1rem",
+      color: "#007bff",
+      textDecoration: "none",
+      fontWeight: "bold",
     },
     carLinkHover: {
-      textDecoration: 'underline',
+      textDecoration: "underline",
     },
   };
 
@@ -95,7 +95,7 @@ const CarListPage = () => {
       ) : (
         <div style={styles.carList}>
           {filteredCars.length === 0 ? (
-            <p>Nenhum carro encontrado.</p>
+            <h2>Nenhum carro encontrado.</h2>
           ) : (
             filteredCars.map((car) => (
               <div style={styles.carItem} key={car._id}>
@@ -107,10 +107,22 @@ const CarListPage = () => {
                 <div style={styles.carDetails}>
                   <h3 style={styles.carInfo}>{car.name}</h3>
                   <p style={styles.carInfo}>Modelo: {car.class}</p>
-                  <p style={styles.carInfo}>Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}</p>
-                  <Link to={`http://localhost:5173/cars?class=${car.class}`} style={styles.carLink}>
-                            Ir para Carros Esportivos
-                          </Link>
+                  <p style={styles.carInfo}>
+                    Preço:{" "}
+                    {new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(car.price)}
+                  </p>
+                  <Link to={`/cars/${car.name}`} style={styles.carLink}>
+                    Ver detalhes do carro
+                  </Link>
+                  <Link
+                    to={`/cars?class=${car.class}`}
+                    style={styles.carLink}
+                  >
+                    Ir para Carros Esportivos
+                  </Link>
                 </div>
               </div>
             ))

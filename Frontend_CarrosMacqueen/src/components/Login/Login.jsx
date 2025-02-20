@@ -10,7 +10,6 @@ const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Verifica se já existe um token salvo no localStorage
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -21,6 +20,8 @@ const Login = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("username");
     setIsLoggedIn(false);
     navigate("/login"); // Redireciona para a tela de login
   };
@@ -42,6 +43,9 @@ const Login = () => {
 
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("isAuthenticated", "true"); // Adiciona isAuthenticated ao localStorage
+        localStorage.setItem("username", email); // Armazena o email como username
+        setIsLoggedIn(true);
         navigate("/");
       } else {
         setError("Erro ao fazer login. Tente novamente.");
@@ -51,38 +55,46 @@ const Login = () => {
     }
   };
 
+  const handleNotMember = () => {
+    navigate("/Cadastro");
+  };
+
   const handlePasswordReset = () => {
     navigate("/password-reset");
   };
 
   return (
     <div className="login-container">
-  {isLoggedIn ? (
-    <div>
-      <p className="message">Você já está em uma conta.</p>
-      <button onClick={handleLogout}>Sair</button>
+      {isLoggedIn ? (
+        <div>
+          <p className="message">Você já está em uma conta.</p>
+          <button onClick={handleLogout}>Sair</button>
+        </div>
+      ) : (
+        <form className="form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {error && <p className="error">{error}</p>}
+          <button type="submit">Login</button>
+          <button type="button" onClick={handleNotMember}>
+            Não possui uma conta? Cadastre-se
+          </button>
+          <button type="button" onClick={handlePasswordReset}>
+            Esqueci minha senha
+          </button>
+        </form>
+      )}
     </div>
-  ) : (
-    <form className="form" onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Senha"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      {error && <p className="error">{error}</p>}
-      <button type="submit">Login</button>
-      <button type="button" onClick={handlePasswordReset}>Esqueceu sua senha?</button>
-    </form>
-  )}
-</div>
-
   );
 };
 
