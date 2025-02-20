@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: ["ys6cmd-5173.csb.app"], // Substitua pelo domínio correto
+    /*guia do Lucas: http://localhost:5173*/
   },
 });
