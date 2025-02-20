@@ -13,6 +13,8 @@ const clientSchema = new mongoose.Schema(
         phone: { type: String, required: true },
         password: { type: String, required: true },
         cards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],
+        resetCode: { type: String },
+        resetCodeExpires: { type: Date },
     },
     { timestamps: true }
 );

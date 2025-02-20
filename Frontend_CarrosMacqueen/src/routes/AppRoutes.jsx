@@ -10,14 +10,17 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import Login from "../components/Login/Login";
 import Cadastro from "../components/Cadastro/Cadastro";
+import PasswordReset from "../components/Redefinir-senha/PasswordReset";
+import ResetPassword from "../components/Redefinir-senha/ResetPassword";
+import VerifyResetCode from "../components/Redefinir-senha/verifyResetCode";
 
 const style = {
   cardContainer: {
-    display: 'flex', // Usar flexbox para alinhar os cards em linha
-    justifyContent: 'center', // Centraliza os cards
-    gap: '20px', // Espaço entre os cards
-    margin: '10px auto', // Margem do contêiner
-    flexWrap: 'wrap', // Permite que os cards quebrem para a próxima linha se necessário
+    display: "flex", // Usar flexbox para alinhar os cards em linha
+    justifyContent: "center", // Centraliza os cards
+    gap: "20px", // Espaço entre os cards
+    margin: "10px auto", // Margem do contêiner
+    flexWrap: "wrap", // Permite que os cards quebrem para a próxima linha se necessário
   },
 };
 
@@ -31,8 +34,8 @@ const AppRoutes = () => (
           <Navbar />
           <HomePage />
           <div style={style.cardContainer}>
-          <Card carName="McLaren F1 LM" />
-          <Card carName="Icona Vulcano Titanium"/>
+            <Card carName="McLaren F1 LM" />
+            <Card carName="Icona Vulcano Titanium" />
           </div>
         </div>
       }
@@ -94,6 +97,36 @@ const AppRoutes = () => (
           <Header />
           <Navbar />
           <Cadastro />
+        </div>
+      }
+    />
+    <Route
+      path="/password-reset"
+      element={
+        <div>
+          <Header />
+          <Navbar />
+          <PasswordReset />
+        </div>
+      }
+    />
+    <Route
+      path="/verify-reset-code"
+      element={
+        <div>
+          <Header />
+          <Navbar />
+          <VerifyResetCode />
+        </div>
+      }
+    />
+    <Route
+      path="/reset-password/:token"
+      element={
+        <div>
+          <Header />
+          <Navbar />
+          <ResetPassword />
         </div>
       }
     />
