@@ -5,6 +5,7 @@ const clientController = require("../controller/clientController");
 // Rotas CRUD para clientes
 router.post("/", clientController.createClient);
 router.get("/", clientController.getClients);
+router.get('/:email', clientController.getClientByEmail);
 router.post("/login", clientController.loginClient);
 router.delete("/:cpf", clientController.deleteClient);
 router.post("/cadastro", clientController.createClient);

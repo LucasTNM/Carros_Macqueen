@@ -13,13 +13,15 @@ import Cadastro from "../components/Cadastro/Cadastro";
 import PasswordReset from "../components/Redefinir-senha/PasswordReset";
 import ResetPassword from "../components/Redefinir-senha/ResetPassword";
 import VerifyResetCode from "../components/Redefinir-senha/verifyResetCode";
+import CarDetails from "../components/CarDetails";
+import Cart from "../components/Cart";
 
 const style = {
   cardContainer: {
     display: "flex", // Usar flexbox para alinhar os cards em linha
     justifyContent: "center", // Centraliza os cards
     gap: "20px", // Espaço entre os cards
-    margin: "10px auto", // Margem do contêiner
+    margin: "auto 10px", // Margem do contêiner
     flexWrap: "wrap", // Permite que os cards quebrem para a próxima linha se necessário
   },
 };
@@ -61,12 +63,22 @@ const AppRoutes = () => (
       }
     />
     <Route
-      path="/payment"
+      path="/payment-method"
       element={
         <div>
           <Header />
           <Navbar />
           <PaymentPage />
+        </div>
+      }
+    />
+    <Route 
+      path="/Carrinho"
+      element={
+        <div>
+          <Header />
+          <Navbar />
+          <Cart />
         </div>
       }
     />
@@ -127,6 +139,16 @@ const AppRoutes = () => (
           <Header />
           <Navbar />
           <ResetPassword />
+        </div>
+      }
+    />
+    <Route
+      path="/cars/:carName"
+      element={
+        <div>
+          <Header />
+          <Navbar />
+          <CarDetails />
         </div>
       }
     />

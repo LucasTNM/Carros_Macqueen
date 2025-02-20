@@ -65,6 +65,19 @@ exports.getClients = async (req, res) => {
   }
 };
 
+exports.getClientByEmail = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const client = await Client.findOne({ email });
+    if (!client) {
+      return res.status(404).json({ message: 'Cliente não encontrado' });
+    }
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar cliente', error: error.message });
+  }
+};
+
 exports.deleteClient = async (req, res) => {
   try {
     const { cpf } = req.params;

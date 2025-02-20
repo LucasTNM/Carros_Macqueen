@@ -18,9 +18,9 @@ app.use(
 
 app.use(express.json());
 
-// Rotas principais
-app.use("/api/cars", require("./routes/carRoutes.js"));
-app.use("/api/clients", require("./routes/clientRoutes.js"));
+app.use('/api/cars', require('./routes/carRoutes.js'));
+app.use('/api/clients', require('./routes/clientRoutes.js'));
+app.use('/api/cart', require('./routes/cartRoutes.js')); 
 
 app.get("/", (req, res) => {
   res.redirect("/api/cars");

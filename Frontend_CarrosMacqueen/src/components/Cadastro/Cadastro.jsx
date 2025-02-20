@@ -52,6 +52,10 @@ const Cadastro = () => {
     }
   };
 
+  const handleHasAccount = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="cadastro-container">
       <form className="form" onSubmit={handleSubmit}>
@@ -107,6 +111,8 @@ const Cadastro = () => {
         {error && <p className="error">{error}</p>}
 
         <button type="submit">Cadastrar</button>
+        <p>Já tem uma conta?</p>
+        <button type="button" onClick={handleHasAccount}>Login</button>
       </form>
     </div>
   );

@@ -21,7 +21,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/payment" style={styles.link}>
+          <Link to="/Carrinho" style={styles.link}>
             <button style={styles.button}>Carrinho</button>
           </Link>
         </li>
