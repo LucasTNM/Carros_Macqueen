@@ -4,26 +4,20 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 
 const handleClientCreation = async (clientData) => {
-  const { name, CPF, email, phone, DateOfBirth, password, address, cards } =
-    clientData;
+  const { name, CPF, email, phone, DateOfBirth, password, address, cards } = clientData;
 
-  if (
-    !name ||
-    !CPF ||
-    !email ||
-    !phone ||
-    !DateOfBirth ||
-    !password ||
-    !address
-  ) {
+  if (!name || !CPF || !email || !phone || !DateOfBirth || !password || !address) {
     throw new Error("Preencha todos os campos");
+  }
+
+  const cpfRegex = /^\d{11}$/;
+  if (!cpfRegex.test(CPF)) {
+    throw new Error("O CPF deve ter exatamente 11 dígitos e conter apenas números");
   }
 
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
   if (!passwordRegex.test(password)) {
-    throw new Error(
-      "A senha deve ter no mínimo 8 dígitos, um caractere especial e uma letra maiúscula"
-    );
+    throw new Error("A senha deve ter no mínimo 8 dígitos, um caractere especial e uma letra maiúscula");
   }
 
   const salt = await bcrypt.genSalt(10);

@@ -33,7 +33,6 @@ const Cadastro = () => {
         formData
       );
 
-      localStorage.setItem("token", response.data.token);
       setFormData({
         // Limpa os campos após cadastro
         name: "",
@@ -46,7 +45,7 @@ const Cadastro = () => {
         cards: [],
       });
 
-      navigate("/"); // Redireciona após o cadastro bem-sucedido
+      navigate("/login"); // Redireciona para a página de login após o cadastro bem-sucedido
     } catch (err) {
       setError(err.response?.data?.message || "Erro ao realizar cadastro.");
     }
@@ -110,7 +109,7 @@ const Cadastro = () => {
         />
         {error && <p className="error">{error}</p>}
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit" >Cadastrar</button>
         <p>Já tem uma conta?</p>
         <button type="button" onClick={handleHasAccount}>Login</button>
       </form>
