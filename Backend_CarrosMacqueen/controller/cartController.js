@@ -2,10 +2,6 @@ const Client = require('../models/clientModel');
 const Car = require('../models/carModel');
 const Cart = require('../models/cartModel');
 
-const Client = require('../models/clientModel');
-const Car = require('../models/carModel');
-const Cart = require('../models/cartModel');
-
 exports.addToCart = async (req, res) => {
   try {
     const { username, carName } = req.body;
