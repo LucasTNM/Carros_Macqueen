@@ -17,7 +17,7 @@ const CarListPage = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await api.get("http://localhost:5000/api/cars");
+        const response = await api.get("https://carros-macqueen-backend.onrender.com/api/cars");
         setCars(response.data); // Atualiza a lista completa
         setFilteredCars(response.data); // Inicializa a lista filtrada com todos os carros
         setLoading(false);

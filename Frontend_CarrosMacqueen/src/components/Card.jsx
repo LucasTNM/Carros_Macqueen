@@ -10,7 +10,7 @@ const Card = ({ carName }) => {
     const fetchCar = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/cars/${carName}`
+          `https://carros-macqueen-backend.onrender.com/api/cars/${carName}`
         );
         setCar(response.data);
       } catch (err) {
