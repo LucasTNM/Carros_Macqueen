@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite apenas este URL
+    origin: process.env.FRONTEND_URL || "https://carros-macqueen-frontend.vercel.app/", // Permite apenas este URL
     methods: ["GET", "POST", "PUT", "DELETE"], // Métodos HTTP permitidos
     credentials: true, // Permite cookies ou headers personalizados
   })
