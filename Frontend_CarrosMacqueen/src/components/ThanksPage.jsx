@@ -8,10 +8,10 @@ const ThanksPage = () => {
   const handleBackToHome = async () => {
     try {
       const username = localStorage.getItem('username');
-      const response = await axios.get(`http://localhost:5000/api/clients/${username}`);
+      const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
       const cpf = response.data.CPF;
 
-      await axios.delete(`http://localhost:5000/api/cart/${cpf}`);
+      await axios.delete(`https://carros-macqueen-backend.onrender.com/api/cart/${cpf}`);
       navigate('/');
     } catch (error) {
       console.error('Erro ao limpar o carrinho', error);

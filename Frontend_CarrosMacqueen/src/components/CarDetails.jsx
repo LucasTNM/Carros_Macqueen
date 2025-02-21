@@ -11,7 +11,7 @@ const CarDetails = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/cars/${carName}`);
+        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cars/${carName}`);
         setCar(response.data);
       } catch (err) {
         setError('Erro ao buscar informações do carro');
@@ -33,11 +33,11 @@ const CarDetails = () => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/clients/${username}`);
+      const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
       const client = response.data;
 
       if (client.cards && client.cards.length > 0) {
-        await axios.post('http://localhost:5000/api/cart/add', {
+        await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
           username,
           carName: car.name,
         });
@@ -61,7 +61,7 @@ const CarDetails = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/cart/add', {
+      const response = await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
         username,
         carName: car.name,
       });

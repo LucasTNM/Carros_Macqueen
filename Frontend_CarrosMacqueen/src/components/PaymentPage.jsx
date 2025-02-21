@@ -19,7 +19,7 @@ function PaymentPage() {
     const handleSubmit = async () => {
         try {
             const username = localStorage.getItem('username');
-            const clientResponse = await axios.get(`http://localhost:5000/api/clients/${username}`);
+            const clientResponse = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
             const clientCPF = clientResponse.data.CPF;
 
             const cardData = {
@@ -31,7 +31,7 @@ function PaymentPage() {
                 clientCPF
             };
 
-            await axios.post('http://localhost:5000/api/cards/add', cardData);
+            await axios.post('https://carros-macqueen-backend.onrender.com/api/cards/add', cardData);
             navigate('/compra-finalizada');
         } catch (error) {
             console.error('Erro ao adicionar cartão', error);

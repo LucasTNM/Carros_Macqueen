@@ -17,7 +17,7 @@ const VerifyResetCode = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/clients/verify-reset-code',
+        'https://carros-macqueen-backend.onrender.com/api/clients/verify-reset-code',
         { email, code }
       );
 

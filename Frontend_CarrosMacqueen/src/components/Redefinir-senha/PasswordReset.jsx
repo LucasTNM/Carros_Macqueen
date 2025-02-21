@@ -16,7 +16,7 @@ const PasswordReset = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/clients/password-reset',
+        'https://carros-macqueen-backend.onrender.com/api/clients/password-reset',
         { email }
       );
 
