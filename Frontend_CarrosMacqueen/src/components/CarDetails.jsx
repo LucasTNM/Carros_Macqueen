@@ -36,7 +36,6 @@ const CarDetails = () => {
 
     try {
       setLoading(true); // Inicia o carregamento
-      console.log('Verificando cartões do cliente...');
       const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
       const client = response.data;
 
@@ -50,10 +49,8 @@ const CarDetails = () => {
           carName: car.name,
         });
 
-        console.log('Resposta da requisição POST:', postResponse);
         navigate('/resumo-pedido');
       } else {
-        console.log('Cliente não possui cartões, redirecionando para método de pagamento...');
         navigate('/payment-method');
       }
     } catch (error) {
@@ -76,9 +73,6 @@ const CarDetails = () => {
 
     try {
       setLoading(true); // Inicia o carregamento
-      console.log('Adicionando carro ao carrinho...');
-      console.log('username:', username);
-      console.log('carName:', car.name);
 
       const response = await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
         username,
@@ -114,12 +108,14 @@ const CarDetails = () => {
         <li style={styles.detailItem}>Ano: {car.year}</li>
         <li style={styles.detailItem}>{car.details}</li>
       </ul>
-      <button onClick={handleBuyClick} disabled={loading}>
-        {loading ? 'Processando...' : 'Comprar'}
-      </button>
-      <button onClick={handleAddToCartClick} disabled={loading}>
-        {loading ? 'Processando...' : 'Guardar no Carrinho'}
-      </button>
+      <div style={styles.buttonContainer}>
+        <button style={styles.button} onClick={handleBuyClick} disabled={loading}>
+          {loading ? 'Processando...' : 'Comprar'}
+        </button>
+        <button style={styles.button} onClick={handleAddToCartClick} disabled={loading}>
+          {loading ? 'Processando...' : 'Guardar no Carrinho'}
+        </button>
+      </div>
     </div>
   );
 };
@@ -159,6 +155,21 @@ const styles = {
     fontSize: '1.2rem',
     color: '#333',
     marginBottom: '10px',
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '10px', // Espaçamento entre os botões
+    marginTop: '20px',
+  },
+  button: {
+    padding: '10px 20px',
+    fontSize: '1rem',
+    color: '#fff',
+    backgroundColor: '#007bff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
   },
 };
 

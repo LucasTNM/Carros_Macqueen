@@ -36,7 +36,7 @@ const Cart = () => {
         const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cart/${cpf}`);
         setCart(response.data);
       } catch (err) {
-        setError('Erro ao buscar o carrinho');
+        setError('Seu carrinho está vazio!');
         console.error(err);
       }
     };
