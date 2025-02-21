@@ -85,7 +85,9 @@ const CarDetails = () => {
       <img src={car.image} alt={car.name} style={styles.carImage} />
       <p style={styles.description}>{car.description}</p>
       <ul style={styles.detailsList}>
-        <li style={styles.detailItem}>Preço: {car.price}</li>
+        <li style={styles.detailItem}>
+          Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.price)}
+        </li>
         <li style={styles.detailItem}>Modelo: {car.class}</li>
         <li style={styles.detailItem}>Ano: {car.year}</li>
         <li style={styles.detailItem}>{car.details}</li>
