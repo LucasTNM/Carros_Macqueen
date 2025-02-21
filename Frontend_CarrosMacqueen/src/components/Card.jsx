@@ -73,7 +73,7 @@ const Card = ({ carName }) => {
       <div style={styles.carDetails}>
         <h3 style={styles.carInfo}>{car.class + "s"}</h3>
         <Link
-          to={`https://carros-macqueen-frontend.vercel.app/cars?class=${car.class}`}
+          to={`/cars?class=${car.class}`}
           style={styles.carLink}
         >
           Ir para classe {car.class + "s"}
