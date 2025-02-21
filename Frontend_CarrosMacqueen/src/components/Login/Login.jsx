@@ -42,8 +42,6 @@ const Login = () => {
         { withCredentials: true }
       );
   
-      console.log("Resposta recebida:", response);
-  
       if (response.data && response.data.token) {
         console.log("Login bem-sucedido, token recebido:", response.data.token);
         localStorage.setItem("token", response.data.token);
