@@ -39,6 +39,8 @@ const CarDetails = () => {
 
       if (client.cards && client.cards.length > 0) {
         console.log('Cliente possui cartões, adicionando ao carrinho...');
+        console.log(username);
+        console.log(car.name)
         await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
           username,
           carName: car.name,

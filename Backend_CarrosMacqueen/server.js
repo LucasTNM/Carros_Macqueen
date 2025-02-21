@@ -10,7 +10,7 @@ const app = express();
 
 const allowedOrigins = [
   'https://carros-macqueen-frontend.vercel.app',
-  'http://localhost:3000' // Adicione outros domínios permitidos aqui
+  'http://localhost:5173' // Adicione outros domínios permitidos aqui
 ];
 
 app.use(
