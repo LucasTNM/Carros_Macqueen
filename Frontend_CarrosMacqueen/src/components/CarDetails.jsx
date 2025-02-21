@@ -33,16 +33,19 @@ const CarDetails = () => {
     }
 
     try {
+      console.log('Verificando cartões do cliente...');
       const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
       const client = response.data;
 
       if (client.cards && client.cards.length > 0) {
+        console.log('Cliente possui cartões, adicionando ao carrinho...');
         await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
           username,
           carName: car.name,
         });
         navigate('/resumo-pedido');
       } else {
+        console.log('Cliente não possui cartões, redirecionando para método de pagamento...');
         navigate('/payment-method');
       }
     } catch (error) {
@@ -61,6 +64,7 @@ const CarDetails = () => {
     }
 
     try {
+      console.log('Adicionando carro ao carrinho...');
       const response = await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
         username,
         carName: car.name,
