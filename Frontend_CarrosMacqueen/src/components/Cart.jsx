@@ -5,11 +5,11 @@ import axios from 'axios';
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
+  const [cpf, setCpf] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEmail = async () => {
+    const fetchCpf = async () => {
       try {
         const username = localStorage.getItem('username');
         if (!username) {
@@ -18,22 +18,22 @@ const Cart = () => {
         }
 
         const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
-        setEmail(response.data.email);
+        setCpf(response.data.CPF);
       } catch (err) {
-        setError('Erro ao buscar o email do cliente');
+        setError('Erro ao buscar o CPF do cliente');
         console.error(err);
       }
     };
 
-    fetchEmail();
+    fetchCpf();
   }, []);
 
   useEffect(() => {
-    if (!email) return;
+    if (!cpf) return;
 
     const fetchCart = async () => {
       try {
-        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cart/${email}`);
+        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cart/${cpf}`);
         setCart(response.data);
       } catch (err) {
         setError('Erro ao buscar o carrinho');
@@ -42,11 +42,11 @@ const Cart = () => {
     };
 
     fetchCart();
-  }, [email]);
+  }, [cpf]);
 
   const handleRemoveItem = async (carName) => {
     try {
-      await axios.delete(`https://carros-macqueen-backend.onrender.com/api/cart/remove/${email}/${encodeURIComponent(carName)}`);
+      await axios.delete(`https://carros-macqueen-backend.onrender.com/api/cart/remove/${cpf}/${encodeURIComponent(carName)}`);
       setCart((prevCart) => ({
         ...prevCart,
         items: prevCart.items.filter((item) => item.car.name !== carName),

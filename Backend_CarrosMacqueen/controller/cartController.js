@@ -8,8 +8,8 @@ exports.addToCart = async (req, res) => {
     console.log('username:', username);
     console.log('carName:', carName);
 
-    // Buscar o cliente pelo email (username)
-    const client = await Client.findOne({ email: username }).populate('cart');
+    // Buscar o cliente pelo username
+    const client = await Client.findOne({ username }).populate('cart');
     if (!client) {
       console.log('Cliente não encontrado');
       return res.status(404).json({ message: 'Cliente não encontrado' });
@@ -24,7 +24,7 @@ exports.addToCart = async (req, res) => {
 
     let cart = client.cart;
     if (!cart) {
-      cart = new Cart({ client: client.email, items: [] }); // Usar client.email
+      cart = new Cart({ client: client.CPF, items: [] }); // Usar client.CPF
       client.cart = cart._id;
       await client.save();
     }
@@ -48,11 +48,11 @@ exports.addToCart = async (req, res) => {
 
 exports.getCart = async (req, res) => {
   try {
-    const { email } = req.params;
-    console.log('email:', email);
+    const { cpf } = req.params;
+    console.log('cpf:', cpf);
 
-    // Buscar o carrinho pelo email do cliente
-    const cart = await Cart.findOne({ client: email }).populate('items.car');
+    // Buscar o carrinho pelo CPF do cliente
+    const cart = await Cart.findOne({ client: cpf }).populate('items.car');
     if (!cart) {
       console.log('Carrinho não encontrado');
       return res.status(404).json({ message: 'Carrinho não encontrado' });
@@ -68,9 +68,9 @@ exports.getCart = async (req, res) => {
 
 exports.removeFromCart = async (req, res) => {
   try {
-    const { email, carName } = req.params;
+    const { cpf, carName } = req.params;
 
-    const cart = await Cart.findOne({ client: email }).populate('items.car');
+    const cart = await Cart.findOne({ client: cpf }).populate('items.car');
     if (!cart || !cart.items || cart.items.length === 0) {
       return res.status(404).json({ message: "Carrinho não encontrado ou vazio" });
     }
@@ -92,9 +92,9 @@ exports.removeFromCart = async (req, res) => {
 
 exports.clearCart = async (req, res) => {
   try {
-    const { email } = req.params;
+    const { cpf } = req.params;
 
-    const cart = await Cart.findOne({ client: email });
+    const cart = await Cart.findOne({ client: cpf });
     if (!cart) {
       return res.status(404).json({ message: 'Carrinho não encontrado' });
     }
