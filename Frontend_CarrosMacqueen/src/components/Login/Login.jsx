@@ -28,29 +28,35 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!email || !password) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
-
+  
     try {
+      console.log("Enviando requisição de login...");
       const response = await axios.post(
         "https://carros-macqueen-backend.onrender.com/api/clients/login",
         { email, password },
         { withCredentials: true }
       );
-
+  
+      console.log("Resposta recebida:", response);
+  
       if (response.data && response.data.token) {
+        console.log("Login bem-sucedido, token recebido:", response.data.token);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("isAuthenticated", "true"); // Adiciona isAuthenticated ao localStorage
         localStorage.setItem("username", email); // Armazena o email como username
         setIsLoggedIn(true);
         navigate("/");
       } else {
+        console.log("Erro ao fazer login, resposta inesperada:", response.data);
         setError("Erro ao fazer login. Tente novamente.");
       }
     } catch (err) {
+      console.error("Erro ao fazer login:", err);
       setError(err.response?.data?.message || "Email ou senha inválidos");
     }
   };
