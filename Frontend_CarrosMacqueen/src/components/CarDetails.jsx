@@ -6,6 +6,7 @@ const CarDetails = () => {
   const { carName } = useParams();
   const [car, setCar] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carregamento
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,24 +28,29 @@ const CarDetails = () => {
     const username = localStorage.getItem('username');
 
     if (!isAuthenticated || !username) {
+      alert('Você será redirecionado para a página de login. Por favor, faça login novamente.');
       console.log('Redirecionando para login...');
       navigate('/login');
       return;
     }
 
     try {
+      setLoading(true); // Inicia o carregamento
       console.log('Verificando cartões do cliente...');
       const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
       const client = response.data;
 
       if (client.cards && client.cards.length > 0) {
         console.log('Cliente possui cartões, adicionando ao carrinho...');
-        console.log(username);
-        console.log(car.name)
-        await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
+        console.log('username:', username);
+        console.log('carName:', car.name);
+
+        const postResponse = await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
           username,
           carName: car.name,
         });
+
+        console.log('Resposta da requisição POST:', postResponse);
         navigate('/resumo-pedido');
       } else {
         console.log('Cliente não possui cartões, redirecionando para método de pagamento...');
@@ -52,6 +58,8 @@ const CarDetails = () => {
       }
     } catch (error) {
       console.error('Erro ao verificar os cartões do cliente', error);
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
@@ -60,20 +68,28 @@ const CarDetails = () => {
     const username = localStorage.getItem('username');
 
     if (!isAuthenticated || !username) {
+      alert('Você será redirecionado para a página de login. Por favor, faça login novamente.');
       console.log('Redirecionando para login...');
       navigate('/login');
       return;
     }
 
     try {
+      setLoading(true); // Inicia o carregamento
       console.log('Adicionando carro ao carrinho...');
+      console.log('username:', username);
+      console.log('carName:', car.name);
+
       const response = await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/add', {
         username,
         carName: car.name,
       });
-      console.log('Resposta da requisição:', response);
+
+      console.log('Resposta da requisição POST:', response);
     } catch (error) {
       console.error('Erro ao adicionar carro ao carrinho', error);
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
@@ -98,8 +114,12 @@ const CarDetails = () => {
         <li style={styles.detailItem}>Ano: {car.year}</li>
         <li style={styles.detailItem}>{car.details}</li>
       </ul>
-      <button onClick={handleBuyClick}>Comprar</button>
-      <button onClick={handleAddToCartClick}>Guardar no Carrinho</button>
+      <button onClick={handleBuyClick} disabled={loading}>
+        {loading ? 'Processando...' : 'Comprar'}
+      </button>
+      <button onClick={handleAddToCartClick} disabled={loading}>
+        {loading ? 'Processando...' : 'Guardar no Carrinho'}
+      </button>
     </div>
   );
 };
