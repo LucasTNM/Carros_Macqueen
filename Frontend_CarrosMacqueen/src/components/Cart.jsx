@@ -5,11 +5,11 @@ import axios from 'axios';
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const [error, setError] = useState('');
-  const [cpf, setCpf] = useState('');
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCpf = async () => {
+    const fetchEmail = async () => {
       try {
         const username = localStorage.getItem('username');
         if (!username) {
@@ -18,22 +18,22 @@ const Cart = () => {
         }
 
         const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
-        setCpf(response.data.CPF);
+        setEmail(response.data.email);
       } catch (err) {
-        setError('Erro ao buscar o CPF do cliente');
+        setError('Erro ao buscar o email do cliente');
         console.error(err);
       }
     };
 
-    fetchCpf();
+    fetchEmail();
   }, []);
 
   useEffect(() => {
-    if (!cpf) return;
+    if (!email) return;
 
     const fetchCart = async () => {
       try {
-        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cart/${cpf}`);
+        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cart/${email}`);
         setCart(response.data);
       } catch (err) {
         setError('Erro ao buscar o carrinho');
@@ -42,11 +42,11 @@ const Cart = () => {
     };
 
     fetchCart();
-  }, [cpf]);
+  }, [email]);
 
   const handleRemoveItem = async (carName) => {
     try {
-      await axios.delete(`https://carros-macqueen-backend.onrender.com/api/cart/remove/${cpf}/${encodeURIComponent(carName)}`);
+      await axios.delete(`https://carros-macqueen-backend.onrender.com/api/cart/remove/${email}/${encodeURIComponent(carName)}`);
       setCart((prevCart) => ({
         ...prevCart,
         items: prevCart.items.filter((item) => item.car.name !== carName),
@@ -83,6 +83,9 @@ const Cart = () => {
                 <div style={styles.carDetails}>
                   <h2 style={styles.carName}>{item.car.name}</h2>
                   <p style={styles.carQuantity}>Quantidade: {item.quantity}</p>
+                  <p style={styles.carPrice}>
+                    Preço: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.car.price)}
+                  </p>
                   <button
                     onClick={() => handleRemoveItem(item.car.name)}
                     style={styles.removeButton}
@@ -143,6 +146,10 @@ const styles = {
     marginBottom: '10px',
   },
   carQuantity: {
+    fontSize: '1.2rem',
+    color: '#666',
+  },
+  carPrice: {
     fontSize: '1.2rem',
     color: '#666',
   },
