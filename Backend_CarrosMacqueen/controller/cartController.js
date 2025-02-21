@@ -24,7 +24,7 @@ exports.addToCart = async (req, res) => {
 
     let cart = client.cart;
     if (!cart) {
-      cart = new Cart({ client: client.CPF, items: [] }); // Usar client.CPF
+      cart = new Cart({ client: client.email, items: [] }); // Usar client.email
       client.cart = cart._id;
       await client.save();
     }
@@ -47,63 +47,63 @@ exports.addToCart = async (req, res) => {
 };
 
 exports.getCart = async (req, res) => {
-    try {
-      const { cpf } = req.params;
-      console.log('cpf:', cpf);
-  
-      // Buscar o carrinho pelo CPF do cliente
-      const cart = await Cart.findOne({ client: cpf }).populate('items.car');
-      if (!cart) {
-        console.log('Carrinho não encontrado');
-        return res.status(404).json({ message: 'Carrinho não encontrado' });
-      }
-  
-      console.log('Carrinho encontrado:', cart);
-      res.status(200).json(cart);
-    } catch (error) {
-      console.error('Erro ao buscar carrinho', error);
-      res.status(500).json({ message: 'Erro ao buscar carrinho', error: error.message });
-    }
-  };
+  try {
+    const { email } = req.params;
+    console.log('email:', email);
 
-  exports.removeFromCart = async (req, res) => {
-    try {
-      const { cpf, carName } = req.params;
-  
-      const cart = await Cart.findOne({ client: cpf }).populate('items.car');
-      if (!cart || !cart.items || cart.items.length === 0) {
-        return res.status(404).json({ message: "Carrinho não encontrado ou vazio" });
-      }
-  
-      const initialLength = cart.items.length;
-      cart.items = cart.items.filter(item => item.car.name.toLowerCase() !== carName.toLowerCase());
-  
-      if (cart.items.length === initialLength) {
-        return res.status(404).json({ message: "Item não encontrado no carrinho" });
-      }
-  
-      await cart.save();
-  
-      res.status(200).json({ message: "Item removido do carrinho com sucesso", items: cart.items });
-    } catch (error) {
-      res.status(500).json({ message: "Erro ao remover item do carrinho", error: error.message });
+    // Buscar o carrinho pelo email do cliente
+    const cart = await Cart.findOne({ client: email }).populate('items.car');
+    if (!cart) {
+      console.log('Carrinho não encontrado');
+      return res.status(404).json({ message: 'Carrinho não encontrado' });
     }
-  };
-  
-  exports.clearCart = async (req, res) => {
-    try {
-      const { cpf } = req.params;
-  
-      const cart = await Cart.findOne({ client: cpf });
-      if (!cart) {
-        return res.status(404).json({ message: 'Carrinho não encontrado' });
-      }
-  
-      cart.items = [];
-      await cart.save();
-  
-      res.status(200).json({ message: 'Carrinho limpo com sucesso', cart });
-    } catch (error) {
-      res.status(500).json({ message: 'Erro ao limpar o carrinho', error: error.message });
+
+    console.log('Carrinho encontrado:', cart);
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error('Erro ao buscar carrinho', error);
+    res.status(500).json({ message: 'Erro ao buscar carrinho', error: error.message });
+  }
+};
+
+exports.removeFromCart = async (req, res) => {
+  try {
+    const { email, carName } = req.params;
+
+    const cart = await Cart.findOne({ client: email }).populate('items.car');
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return res.status(404).json({ message: "Carrinho não encontrado ou vazio" });
     }
-  };
+
+    const initialLength = cart.items.length;
+    cart.items = cart.items.filter(item => item.car.name.toLowerCase() !== carName.toLowerCase());
+
+    if (cart.items.length === initialLength) {
+      return res.status(404).json({ message: "Item não encontrado no carrinho" });
+    }
+
+    await cart.save();
+
+    res.status(200).json({ message: "Item removido do carrinho com sucesso", items: cart.items });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao remover item do carrinho", error: error.message });
+  }
+};
+
+exports.clearCart = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const cart = await Cart.findOne({ client: email });
+    if (!cart) {
+      return res.status(404).json({ message: 'Carrinho não encontrado' });
+    }
+
+    cart.items = [];
+    await cart.save();
+
+    res.status(200).json({ message: 'Carrinho limpo com sucesso', cart });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao limpar o carrinho', error: error.message });
+  }
+};
