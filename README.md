@@ -46,7 +46,7 @@ Este é o projeto Carros Macqueen, uma simulação de uma loja de carros, onde �
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/seu-usuario/carros-macqueen-final-project.git
+   git clone https://github.com/LucasTNM/Carros_Macqueen.git
    ```
 
 
