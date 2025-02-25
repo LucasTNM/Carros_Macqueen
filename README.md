@@ -2,6 +2,12 @@
 
 Este é o projeto Carros Macqueen, uma simulação de uma loja de carros, onde é possível visualizar, comprar e adicionar carros ao carrinho. A aplicação é composta por um frontend em React e um backend em Node.js com Express. A aplicação também inclui funcionalidades de login e cadastro de usuários.
 
+## Acesso da aplicação
+
+O frontend está hospedado no Vercel. Você pode acessar a aplicação em produção através do seguinte link:
+
+https://carrosmacqueen.vercel.app/
+
 ## Funcionalidades
 
 - Visualização de carros
