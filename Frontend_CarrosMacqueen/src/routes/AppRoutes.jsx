@@ -38,8 +38,8 @@ const AppRoutes = () => (
           <Navbar />
           <HomePage />
           <div style={style.cardContainer}>
-            <Card carName="McLaren F1 LM" />
-            <Card carName="Icona Vulcano Titanium" />
+            <Card carName="Bugatti EB 110 SS" />
+            <Card carName="Mustang GTX350" />
           </div>
         </div>
       }
