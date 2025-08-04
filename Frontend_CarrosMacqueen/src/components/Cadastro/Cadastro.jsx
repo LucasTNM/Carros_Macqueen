@@ -29,7 +29,7 @@ const Cadastro = () => {
 
     try {
       const response = await axios.post(
-        "https://carros-macqueen-backend.onrender.com/api/clients/cadastro",
+        "https://carros-macqueen-backend.onrender.com/api/clients",
         formData
       );
 

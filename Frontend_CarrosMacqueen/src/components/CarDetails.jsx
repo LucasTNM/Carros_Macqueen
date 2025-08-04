@@ -36,7 +36,7 @@ const CarDetails = () => {
 
     try {
       setLoading(true); // Inicia o carregamento
-      const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
+      const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/email/${username}`);
       const client = response.data;
 
       if (client.cards && client.cards.length > 0) {

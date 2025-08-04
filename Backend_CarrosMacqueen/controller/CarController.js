@@ -35,6 +35,16 @@ class CarController extends ICarController{
            return res.status(500).json({ message: 'Erro ao deletar carro', error: error.message });
          }
     }
+
+   async destroyByName(req,res){
+         try {
+           let car = await cardao.deleteByName(req);
+           if (!car) return res.status(404).json({ message: 'Carro não encontrado' });
+           return res.json({ message: 'Carro deletado com sucesso' });
+         } catch (error) {
+           return res.status(500).json({ message: 'Erro ao deletar carro', error: error.message });
+         }
+    }
    async update(req,res){
         try {
           let car = await cardao.update(req);

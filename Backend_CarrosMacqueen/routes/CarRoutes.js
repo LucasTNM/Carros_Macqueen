@@ -123,6 +123,7 @@ class CarRoutes extends IRoutes{
   delete(){
     // Car routes
     app.delete('/api/cars/:id', carController.destroy);
+    app.delete('/api/cars/name/:name', carController.destroyByName);
     
     // Client routes
     app.delete('/api/clients/cpf/:cpf', clientController.destroy);

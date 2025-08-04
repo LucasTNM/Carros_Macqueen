@@ -24,7 +24,7 @@ class CarDAO_Mongoose extends ICarDAO{
        
      }
      async delete(req){
-        let car = await Car.findByIdAndRemove(req.params.id);
+        let car = await Car.findByIdAndDelete(req.params.id);
         return car; 
      } 
   
@@ -38,6 +38,11 @@ class CarDAO_Mongoose extends ICarDAO{
      
      async findByName(req){
         let car = await Car.findOne({ name: req.params.name });
+        return car;
+     }
+
+     async deleteByName(req){
+        let car = await Car.findOneAndDelete({ name: req.params.name });
         return car;
      }
    
