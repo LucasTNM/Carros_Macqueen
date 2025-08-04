@@ -31,7 +31,7 @@ app.use(
 
 app.use(express.json());
 
-app.use('/api/cars', require('./routes/carRoutes.js'));
+app.use('/api/cars', require('./routes/CarRoutes.js'));
 app.use('/api/clients', require('./routes/clientRoutes.js'));
 app.use('/api/cart', require('./routes/cartRoutes.js'));
 app.use('/api/cards', require('./routes/cardRoutes.js'));
