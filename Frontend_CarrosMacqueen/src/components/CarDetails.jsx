@@ -12,7 +12,7 @@ const CarDetails = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cars/name/${encodeURIComponent(carName)}`);
+        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/cars/name/${carName}`);
         setCar(response.data);
       } catch (err) {
         setError('Erro ao buscar informações do carro');
