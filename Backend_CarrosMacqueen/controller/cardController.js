@@ -1,56 +1,69 @@
-const Card = require('../models/cardModel');
-const Client = require('../models/clientModel');
+const ICardController = require('./ICardController.js');
 
-exports.addCard = async (req, res) => {
-  try {
-    const { cardType, cardNumber, cardExpiry, cardCVV, fullName, clientCPF } = req.body;
+const config = require('../config.js');
+const CardDAO = require('../persistencelayer/dao/'+config.ICardDAO);
+let carddao = new CardDAO();
 
-    const client = await Client.findOne({ CPF: clientCPF });
-    if (!client) {
-      return res.status(404).json({ message: 'Cliente não encontrado' });
-    }
-
-    const card = new Card({ cardType, cardNumber, cardExpiry, cardCVV, fullName, clientCPF });
-    await card.save();
-
-    client.cards.push(card._id);
-    await client.save();
-
-    res.status(201).json({ message: 'Cartão adicionado com sucesso', card });
-  } catch (error) {
-    res.status(500).json({ message: 'Erro ao adicionar cartão', error: error.message });
+class CardController extends ICardController{
+  constructor(){
+    super();
+       
   }
-};
 
-exports.getCardsByClientCPF = async (req, res) => {
-  try {
-    const { clientCPF } = req.params;
-
-    const cards = await Card.find({ clientCPF });
-    if (!cards.length) {
-      return res.status(404).json({ message: 'Nenhum cartão encontrado para este cliente' });
+  
+  async show(req, res)
+    {
+  
+       let cards = await carddao.recovery();
+        return res.json(cards);
+    }
+  async store(req, res)
+     {
+        try {
+          const card =  await carddao.create(req);
+          return res.status(201).json(card);
+        } catch (error) {
+          return res.status(500).json({ message: 'Erro ao criar cartão', error: error.message });
+        }
+     }
+   async destroy(req,res){
+         try {
+           let card = await carddao.delete(req);
+           if (!card) return res.status(404).json({ message: 'Cartão não encontrado' });
+           return res.json({ message: 'Cartão deletado com sucesso' });
+         } catch (error) {
+           return res.status(500).json({ message: 'Erro ao deletar cartão', error: error.message });
+         }
+    }
+   async update(req,res){
+        try {
+          let card = await carddao.update(req);
+          if (!card) return res.status(404).json({ message: 'Cartão não encontrado' });
+          return res.json(card);
+        } catch (error) {
+          return res.status(500).json({ message: 'Erro ao atualizar cartão', error: error.message });
+        }
     }
 
-    res.status(200).json(cards);
-  } catch (error) {
-    res.status(500).json({ message: 'Erro ao buscar cartões', error: error.message });
-  }
-};
-
-exports.deleteCard = async (req, res) => {
-    try {
-      const { cardNumber } = req.params;
-  
-      const card = await Card.findOneAndDelete({ cardNumber });
-      if (!card) {
-        return res.status(404).json({ message: 'Cartão não encontrado' });
-      }
-  
-      // Remover o cartão da lista de cartões do cliente
-      await Client.updateOne({ CPF: card.clientCPF }, { $pull: { cards: card._id } });
-  
-      res.status(200).json({ message: 'Cartão excluído com sucesso' });
-    } catch (error) {
-      res.status(500).json({ message: 'Erro ao excluir cartão', error: error.message });
+   async index(req,res)
+    {
+        try {
+          let cards = await carddao.search(req);
+          return res.json(cards);
+        } catch (error) {
+          return res.status(500).json({ message: 'Erro ao buscar cartões', error: error.message });
+        }
     }
-  };
+
+   async getByClientCPF(req,res)
+    {
+        try {
+          let cards = await carddao.findByClientId(req.params.cpf);
+          return res.json(cards);
+        } catch (error) {
+          return res.status(500).json({ message: 'Erro ao buscar cartões do cliente', error: error.message });
+        }
+    }
+  
+}
+module.exports = CardController;
