@@ -23,7 +23,7 @@ const ResetPassword = () => {
 
     try {
       const response = await axios.post(
-        `https://carros-macqueen-backend.onrender.com/api/clients/reset-password/${token}`,
+        'https://carros-macqueen-backend.onrender.com/api/clients/update-password',
         { password }
       );
 

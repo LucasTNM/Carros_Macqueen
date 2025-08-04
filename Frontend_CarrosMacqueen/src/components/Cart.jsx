@@ -17,7 +17,7 @@ const Cart = () => {
           return;
         }
 
-        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
+        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/email/${username}`);
         setCpf(response.data.CPF);
       } catch (err) {
         setError('Erro ao buscar o CPF do cliente');
@@ -46,7 +46,10 @@ const Cart = () => {
 
   const handleRemoveItem = async (carName) => {
     try {
-      await axios.delete(`https://carros-macqueen-backend.onrender.com/api/cart/remove/${cpf}/${encodeURIComponent(carName)}`);
+      await axios.post('https://carros-macqueen-backend.onrender.com/api/cart/remove', {
+        cpf: cpf,
+        carName: carName
+      });
       setCart((prevCart) => ({
         ...prevCart,
         items: prevCart.items.filter((item) => item.car.name !== carName),

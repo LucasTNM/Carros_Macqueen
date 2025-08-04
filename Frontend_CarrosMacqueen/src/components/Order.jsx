@@ -17,7 +17,7 @@ const Order = () => {
           return;
         }
 
-        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
+        const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/email/${username}`);
         setCpf(response.data.CPF);
       } catch (err) {
         setError('Erro ao buscar o CPF do cliente');
@@ -47,7 +47,7 @@ const Order = () => {
   const handlePaymentClick = async () => {
     try {
       const username = localStorage.getItem('username');
-      const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/${username}`);
+      const response = await axios.get(`https://carros-macqueen-backend.onrender.com/api/clients/email/${username}`);
       const client = response.data;
 
       console.log('Client data:', client);
